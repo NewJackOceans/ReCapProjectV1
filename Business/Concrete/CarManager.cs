@@ -19,7 +19,12 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public List<Car> GelAll()
+        public void Add(Car car)
+        {
+            
+        }
+
+        public List<Car> GetAll()
         {
             //İş kodları
             //Yetkisi var mı?
@@ -27,6 +32,16 @@ namespace Business.Concrete
 
         }
 
-        
+        public List<Car> GetCarsByBrandId(int id)
+        {
+            return _carDal.GetAll(c => c.BrandId == id);
+        }
+
+        public List<Car> GetCarsByColorId(int id)
+        {
+            return _carDal.GetAll(c => c.ColorId == id);
+        }
+
+
     }
 }
