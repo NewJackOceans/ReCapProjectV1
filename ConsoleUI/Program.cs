@@ -12,7 +12,7 @@ namespace ConsoleUI
         {
             CarManager carManager = new CarManager(new EfCarDal());
 
-            var car1 = new Entities.Concrete.Car { BrandId = 1, ColorId = 123, DailyPrice = 1233, Description = "Güzel araba", ModelYear = 1998, };
+            var car1 = new Entities.Concrete.Car { BrandId = 1, ColorId = 123, DailyPrice = 1233, Description = "Güzel araba", ModelYear = 1998, Id = 123, Name = "Corsa" };
 
             carManager.Add(car1);
 
@@ -27,7 +27,7 @@ namespace ConsoleUI
             //CarManager carManager = new CarManager(new EfCarDal());
             foreach (var car in carManager.GetAll())
             {
-                Console.WriteLine(car.Name);
+                Console.WriteLine(car.DailyPrice);
             }
         }
     }
