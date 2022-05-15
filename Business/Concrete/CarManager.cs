@@ -2,6 +2,7 @@
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,16 +33,24 @@ namespace Business.Concrete
 
         }
 
-        public List<Car> GetCarsByBrandId(int id)
+        public List<Car> GetAllByCarId(int id)
         {
-            return _carDal.GetAll(c => c.BrandId == id);
+            throw new NotImplementedException();
         }
 
-        public List<Car> GetCarsByColorId(int id)
+        public List<Car> GetByDailyPrice(int dailyPrice)
         {
-            return _carDal.GetAll(c => c.ColorId == id);
+            throw new NotImplementedException();
         }
 
+        public Car GetById(int carId)
+        {
+            return _carDal.Get(c=>c.Id == carId);
+        }
 
+        public List<CarDetailDto> GetCarDetails()
+        {
+            return _carDal.GetCarDetails();
+        }
     }
 }

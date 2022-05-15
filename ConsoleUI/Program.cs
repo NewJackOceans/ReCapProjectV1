@@ -13,15 +13,22 @@ namespace ConsoleUI
             CarManager carManager = new CarManager(new EfCarDal());
 
             var car1 = new Entities.Concrete.Car { BrandId = 1, ColorId = 123, DailyPrice = 1233, Description = "Güzel araba", ModelYear = 1998, };
-            
-            carManager.Add(car1);
-            
 
+            carManager.Add(car1);
+
+
+            //foreach (var car in carManager.GetAll())
+            //{
+            //    Console.WriteLine(car.Name);
+            //}
+            //Console.ReadLine();
+
+
+            //CarManager carManager = new CarManager(new EfCarDal());
             foreach (var car in carManager.GetAll())
             {
                 Console.WriteLine(car.Name);
             }
-            Console.ReadLine();
         }
     }
 }

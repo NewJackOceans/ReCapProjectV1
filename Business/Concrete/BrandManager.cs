@@ -27,26 +27,23 @@ namespace Business.Concrete
             if (brand.Name.Length > 2)
             {
                 _brandDal.Add(brand);
-                return new(Messages.BrandAdded);
+                //return new(Messages.BrandAdded);
 
             }
             else
             {
-                return new (Messages.BrandNameInValid);
+                //return new (Messages.BrandNameInValid);
             }
         }
 
         public List<Brand> GetAll()
         {
-            throw new NotImplementedException();
+            return _brandDal.GetAll();
         }
 
-        public List<Brand> GetById(int brandId)
+        Brand IBrandService.GetById(int brandId)
         {
-            throw new NotImplementedException();
-        } 
-        
-
-        
+            return _brandDal.Get(b => b.Id == brandId);
+        }
     }
 }
