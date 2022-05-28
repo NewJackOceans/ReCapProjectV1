@@ -1,12 +1,17 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
-using Salesforce.Common.Models.Json;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+
 
 namespace Business.Concrete
 {
@@ -20,30 +25,30 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
-        public object Messages { get; private set; }
-
-        public void Add(Brand brand)
+        public IResult Add(Brand brand)
         {
-            if (brand.Name.Length > 2)
+            if (brand.Name.Length < 2)
             {
-                _brandDal.Add(brand);
-                //return new(Messages.BrandAdded);
+                return new ErrorResult(Messages.BrandNameInValid);
 
-            }
-            else
+            }else
             {
-                //return new (Messages.BrandNameInValid);
+                return new ErrorResult(Messages.BrandAdded);
             }
         }
 
-        public List<Brand> GetAll()
+        public IDataResult<List<Brand>> GetAll()
         {
-            return _brandDal.GetAll();
+            if (DateTime.Now.Hour == 03)
+            {
+                return new ErrorDataResult<List<Brand>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(),Messages.BrandListed);
         }
 
-        Brand IBrandService.GetById(int brandId)
+        public IDataResult<Brand> GetById(int brandId)
         {
-            return _brandDal.Get(b => b.Id == brandId);
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId));
         }
     }
 }

@@ -2,33 +2,44 @@
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace ConsoleUI
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            CarManager carManager = new CarManager(new EfCarDal());
+            CarTest();
+            //BrandTest();
+            
+        }
 
-            var car1 = new Entities.Concrete.Car { BrandId = 1, ColorId = 123, DailyPrice = 1233, Description = "Güzel araba", ModelYear = 1998, Id = 123, Name = "Corsa" };
-
-            carManager.Add(car1);
-
-
-            //foreach (var car in carManager.GetAll())
-            //{
-            //    Console.WriteLine(car.Name);
-            //}
-            //Console.ReadLine();
-
-
-            //CarManager carManager = new CarManager(new EfCarDal());
-            foreach (var car in carManager.GetAll())
+        private static void BrandTest()
+        {
+            BrandManager brandManager = new BrandManager(new EfBrandDal());
+            foreach (var brand in brandManager.GetAll().Data)
             {
-                Console.WriteLine(car.DailyPrice);
+                Console.WriteLine(brand.Name);
             }
+
+        }
+
+        private static void CarTest()
+        {
+            CarManager carManager = new CarManager(new EfCarDal());
+            var result = carManager.GetCarDetails();
+            if (result.Success)
+            {
+                foreach (var car in result.Data)
+                {
+                    Console.WriteLine(car.CarName + " / " + car.BrandName);
+                }
+            }else
+            {
+                Console.WriteLine(result.Message);
+            }
+            
+            
         }
     }
 }
