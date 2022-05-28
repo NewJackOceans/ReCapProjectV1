@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
@@ -20,9 +21,15 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
-            
+            if (car.Name.Length < 2)
+            {
+                return new ErrosResult("Araba ismi en az 2 karakter olmalıdır.");
+            }
+            _carDal.Add(car);
+
+            return new SuccessResult("Araba eklendi.");
         }
 
         public List<Car> GetAll()
