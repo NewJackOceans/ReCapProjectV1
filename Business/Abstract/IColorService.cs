@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    internal interface IColorService
+    public interface IColorService
     {
         IDataResult<List<Color>> GetAll();
         

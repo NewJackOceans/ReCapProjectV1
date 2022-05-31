@@ -41,7 +41,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetAll()
         {
-            if (DateTime.Now.Hour == 03)
+            if (DateTime.Now.Hour == 3)
             {
                 return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
@@ -53,7 +53,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id));
         }
 
-        public IDataResult<List<Car>> GetByDailyPrice(int dailyPrice)
+        public IDataResult<List<Car>> GetByDailyPrice(decimal dailyPrice)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.DailyPrice == dailyPrice));
         }
