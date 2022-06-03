@@ -28,7 +28,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Color>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.BrandListed);
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
         }
 
         public IDataResult<Color> GetById(int colorId)

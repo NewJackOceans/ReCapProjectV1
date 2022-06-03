@@ -17,6 +17,7 @@ namespace Business.Constants
         public static string MaintenanceTime = "Bakım zamanı, en kısa sürede hizmetinizdeyiz.";
         public static string BrandListed = "Markalar listelendi.";
         public static string CarListed = "Arabalar listelendi.";
+        public static string CarImageListed = "Araba fotoğrafları listelendi.";
         public static string ColorListed = "Tüm renklerdeki arabalar listelendi..";
         public static string UserAdded = "Kullanıcı eklendi.";
         public static string UserRemoved = "Kullanıcı sistemden silindi."; 
@@ -30,7 +31,12 @@ namespace Business.Constants
         public static string RentalAdded = "Kiralama başarılı";
         public static string RentalRemoved = "Kiralama iptal edildi.";
         public static string RentalUpdated = "Kiralama tarihleri güncellendi.";
-        public static string RentalsListed = "Kiralama'da olan araçlar listelendi.";
+        public static string RentalsListed = "Kiralama'da olan araçlar listelendi."; 
+        public static string CarNameAlreadyExists = "Eklemeye çalıştığınız araba mevcut.";
+        public static string CarImageAdded = "Araba fotoğrafı başarıyla eklenmiştir.";
+        public static string CarImageLimitsError = "Bir araba için en fazla 5 tane fotoğraf yükleyebilirsiniz.";
+        public static string CarImageRemoved = "Araba fotoğrafı başarılı bir şekilde silinmiştir.";
+        public static string CarImageUpdated = "Araba fotoğrafı güncellenmiştir.";
 
 
 
