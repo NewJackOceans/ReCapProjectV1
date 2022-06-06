@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace WebAPI.Controllers
 {
@@ -9,77 +11,69 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CarImagesController : ControllerBase
     {
-        ICarImageService _carImageService;
+        private readonly ICarImageService _carImageService;
+
         public CarImagesController(ICarImageService carImageService)
         {
             _carImageService = carImageService;
         }
+
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _carImageService.GetAll();
+            IDataResult<List<CarImage>> result = _carImageService.GetAll();
+
             if (result.Success)
-            {
                 return Ok(result);
-            }
-            return BadRequest(result);
+            else
+                return BadRequest(result);
         }
-        [HttpGet("getallbycarid")]
-        public IActionResult GetAllByCarId(int carId)
+
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
         {
+            IDataResult<CarImage> result = _carImageService.GetById(id);
 
-            var result = _carImageService.GetByCarId(carId);
             if (result.Success)
-            {
                 return Ok(result);
-            }
-            return BadRequest(result);
-
+            else
+                return BadRequest(result);
         }
-        [HttpGet("getallbyimageid")]
-        public IActionResult GetAllByImageId(int imageId)
-        {
 
-            var result = _carImageService.GetAllByImageId(imageId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
 
-        }
         [HttpPost("add")]
-        public IActionResult Add(CarImage carImage)
+        public IActionResult Add([FromForm(Name = "Image")] IFormFile file, [FromForm] CarImage carImage)
         {
-            var result = _carImageService.Add(carImage);
+            var result = _carImageService.Add(carImage, file);
             if (result.Success)
-            {
                 return Ok(result);
-            }
-            return BadRequest(result);
-
+            else
+                return BadRequest(result);
         }
-        [HttpPost("delete")]
-        public IActionResult Delete(CarImage carImage)
+
+        [HttpPut("update")]
+        public IActionResult Update([FromForm(Name = "Image")] IFormFile file, [FromForm] CarImage carImage)
         {
-            var result = _carImageService.Delete(carImage);
+            var result = _carImageService.Update(file, carImage);
             if (result.Success)
-            {
                 return Ok(result);
-            }
-            return BadRequest(result);
-
+            else
+                return BadRequest(result);
         }
-        [HttpPost("update")]
-        public IActionResult Update(CarImage carImage)
+
+        [HttpDelete("delete")]
+        public IActionResult Update(int id)
         {
-            var result = _carImageService.Update(carImage);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+            CarImage deletedId = _carImageService.GetById(id).Data;
+            var result = _carImageService.Delete(deletedId);
 
+            if (result.Success)
+                return Ok(result);
+            else
+                return BadRequest(result);
         }
+
+
     }
 }
