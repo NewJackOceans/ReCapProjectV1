@@ -20,8 +20,8 @@ namespace Business.Abstract
         IResult Delete(Car car);
         IResult Update(Car car);
         IResult AddTransactionalTest(Car car);
-
-
-
+        IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount);
+        IDataResult<List<Car>> GetByBrandId(int brandId);
+        IDataResult<List<Car>> GetByColorId(int colorId);
     }
 }

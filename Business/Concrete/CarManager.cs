@@ -32,7 +32,7 @@ namespace Business.Concrete
         //Claim
         [SecuredOperation("product.add, admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("IProductService.Get")]
+        [CacheRemoveAspect("ICarService.Add")]
         public IResult Add(Car car)
         {
             IResult result = BusinessRules.Run(
@@ -56,7 +56,7 @@ namespace Business.Concrete
             return null;
 
         }
-
+        [SecuredOperation("admin")]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
@@ -78,6 +78,16 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id));
         }
 
+        public IDataResult<List<Car>> GetByBrandId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.Id == id));
+        }
+
+        public IDataResult<List<Car>> GetByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(color => color.Id == id));
+        }
+
         public IDataResult<List<Car>> GetByDailyPrice(decimal dailyPrice)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.DailyPrice == dailyPrice));
@@ -92,7 +102,15 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
         }
-        [CacheRemoveAspect("IProductService.Get")]
+
+        public IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount)
+        {
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(null, pageIndex,pageCount), Messages.CarListed);
+        }
+
+        [SecuredOperation("admin")]
+        [CacheRemoveAspect("ICarService.Update")]
         public IResult Update(Car car)
         {
             _carDal.Update(car);

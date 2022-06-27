@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspects.Autofac.Caching;
 using Core.Utilities.Results;
@@ -25,7 +26,8 @@ namespace Business.Concrete
         {
             _brandDal = brandDal;
         }
-        [CacheRemoveAspect("IProductService.Get")]
+        [SecuredOperation("admin")]
+        [CacheRemoveAspect("IBrandService.Get")]
         public IResult Add(Brand brand)
         {
             if (brand.Name.Length < 2)

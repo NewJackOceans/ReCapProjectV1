@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.DataAccess.EntityFramework
 {
-    public class EfEntityRepositoryBase<TEntity, TContext>:IEntityRepository<TEntity>
+    public class EfEntityRepositoryBase<TEntity, TContext>:IEntityRepository<TEntity> //Repository Pattern
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
@@ -49,6 +49,15 @@ namespace Core.DataAccess.EntityFramework
                 return filter == null
                     ? context.Set<TEntity>().ToList()
                     : context.Set<TEntity>().Where(filter).ToList();
+            }
+        }
+        public List<TEntity> GetForPageable(Expression<Func<TEntity, bool>> filter = null, int pageIndex = 0, int pageCount = 20)
+        {
+            using (TContext context = new TContext()) 
+            {
+                return filter == null
+                    ? context.Set<TEntity>().Skip(pageIndex*pageCount).Take(pageCount).ToList()
+                    : context.Set<TEntity>().Where(filter).Skip(pageIndex * pageCount).Take(pageCount).ToList();
             }
         }
 
