@@ -20,6 +20,6 @@ namespace Entities.DTOs
         public string ColorName { get; set; }
         public decimal DailyPrice { get; set; }
         public string Description { get; set; }
-        public List<CarImage> Images { get; set; }
+        public List<string> CarImagePath { get; set; }
     }
 }

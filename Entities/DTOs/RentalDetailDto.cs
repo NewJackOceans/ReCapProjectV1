@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
 
-namespace Business.Constants
+namespace Entities.DTOs
 {
-    public class PathConstant
+    public class CarImageDetailDto : IDto
     {
-        public static string ImagesPath = "wwwroot\\Uploads\\Images\\";
+        public string ImagePath { get; set; }
     }
 }

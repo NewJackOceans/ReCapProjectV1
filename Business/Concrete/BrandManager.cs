@@ -30,7 +30,7 @@ namespace Business.Concrete
         [CacheRemoveAspect("IBrandService.Get")]
         public IResult Add(Brand brand)
         {
-            if (brand.Name.Length < 2)
+            if (brand.BrandName.Length < 2)
             {
                 return new ErrorResult(Messages.BrandNameInValid);
 
