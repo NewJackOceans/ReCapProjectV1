@@ -1,8 +1,12 @@
-﻿using Business.Abstract;
-using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Business.Abstract;
+using Entities.Concrete;
 
 namespace WebAPI.Controllers
 {
@@ -10,14 +14,17 @@ namespace WebAPI.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        IRentalService _rentalService;
+        private IRentalService _rentalService;
+
         public RentalsController(IRentalService rentalService)
         {
             _rentalService = rentalService;
         }
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
+            Thread.Sleep(1000);
 
             var result = _rentalService.GetAll();
             if (result.Success)
@@ -26,28 +33,29 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("getallbyrentdate")]
-        public IActionResult GetAllByRentDate(DateTime rentDate)
-        {
 
-            var result = _rentalService.GetAllByRentDate(rentDate);
+        [HttpGet("getrentalsdetails")]
+        public IActionResult GetRentalsDetails()
+        {
+            var result = _rentalService.GetRentalsDetails();
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpGet("getallbyreturndate")]
-        public IActionResult GetAllByReturnDate(DateTime rentDate)
-        {
 
-            var result = _rentalService.GetAllByReturnDate(rentDate);
+        [HttpGet("getrentalbyid")]
+        public IActionResult GetRentalById(int rentalId)
+        {
+            var result = _rentalService.GetRentalById(rentalId);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
+
         [HttpPost("add")]
         public IActionResult Add(Rental rental)
         {
@@ -57,8 +65,8 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
-
         }
+
         [HttpPost("delete")]
         public IActionResult Delete(Rental rental)
         {
@@ -68,8 +76,8 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
-
         }
+
         [HttpPost("update")]
         public IActionResult Update(Rental rental)
         {
@@ -79,6 +87,23 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+        [HttpGet("iscaravaible")]
+        public IActionResult IsCarAvaible(int cardId)
+        {
+            var result = _rentalService.IsCarAvaible(cardId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("totalprice")]
+        public IActionResult TotalPrice(object totalAmountInfo)
+        {
+
+            return Ok();
 
         }
     }

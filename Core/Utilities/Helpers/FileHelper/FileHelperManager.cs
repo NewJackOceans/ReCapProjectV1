@@ -1,92 +1,55 @@
-﻿using Core.Utilities.Results;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
+using Core.Utilities.Helpers.FileHelper;
+using Core.Utilities.Helpers.GuidHelperr;
+using Microsoft.AspNetCore.Http;
 
 namespace Core.Utilities.Helpers.FileHelper
 {
     public class FileHelperManager : IFileHelper
     {
-        public IResult Delete(string filePath)
+        public void Delete(string filePath)//Burada ki string filePath, 'CarImageManager'dan gelen dosyamın kaydedildiği adres ve adı 
         {
-            DeleteOldImageFile(filePath); //Aynı isimli dosya var mı diye kontrol yapar ve varsa siler.
-            return new SuccessResult();
-        }
-
-        public IResult Update(IFormFile file, string filePath, string root)
-        {
-            DeleteOldImageFile(filePath);
-            return Upload(file, root);
-        }
-
-        public IResult Upload(IFormFile file, string root)
-        {
-            var fileExists = CheckFileExists(file); //Dosya varlığı method ile kontrol edilir.
-            if (fileExists.Message != null)
+            if (File.Exists(filePath))//if kontrolü ile parametrede gelen adreste öyle bir dosya var mı diye kontrol ediliyor.
             {
-                return new ErrorResult(fileExists.Message);
-            }
-            var extension = Path.GetExtension(file.FileName); //Yükleyeceğimiz dosyanın uzantısını alır. Örn: .jpg
-            var extensionValid = CheckFileExtensionValid(extension); //Dosyanın tip uygunluğu method ile kontrol eder.
-            string guid = Guid.NewGuid().ToString(); //Dosyanın yeni random ismi(GUID) elde edilir.
-            string filePath = guid + extension; //GUID ile dosya uzantısı birleştirilerek yeni dosya yolu oluşturulur.
-
-            if (extensionValid.Message != null)
-            {
-                return new ErrorResult(extensionValid.Message);
-            }
-
-            CheckDirectoryExists(root); //Method ile dosyanın kaydedileceği dizin kontrolü yapılır, yoksa dizin oluşturulur.
-            CreateImageFile(root + filePath, file); // Belirtilen yolda bir dosya oluşturur veya üzerine yazar ve bellek boşaltılır
-            return new SuccessResult(filePath); //SQL'e kayıt için dosya adını döndürüyoruz.
-        }
-
-        //Kontrol methodları
-
-        private static IResult CheckFileExists(IFormFile file)
-        {
-            if (file != null && file.Length > 0)
-            {
-                return new SuccessResult();
-            }
-            return new ErrorResult("Dosya yok");
-        }
-
-        private static IResult CheckFileExtensionValid(string extension)
-        {
-            if (extension != ".jpeg" && extension != ".png" && extension != ".jpg")
-            {
-                return new ErrorResult("Hatalı dosya uzantısı");
-            }
-            return new SuccessResult();
-        }
-
-        private static void CheckDirectoryExists(string root)
-        {
-            if (!Directory.Exists(root))
-            {
-                Directory.CreateDirectory(root);
+                File.Delete(filePath);//Eğer dosya var ise dosya bulunduğu yerden siliniyor.
             }
         }
 
-        private static void CreateImageFile(string directory, IFormFile file)
+        public string Update(IFormFile file, string filePath, string root)//Dosya güncellemek için ise gelen parametreye baktığımızda Güncellenecek yeni dosya, Eski dosyamızın kayıt dizini, ve yeni bir kayıt dizini
         {
-            using (FileStream fileStream = File.Create(directory))
+            if (File.Exists(filePath))// Tekrar if kontrolü ile parametrede gelen adreste öyle bir dosya var mı diye kontrol ediliyor.
             {
-                file.CopyTo(fileStream);
-                fileStream.Flush();
+                File.Delete(filePath);//Eğer dosya var ise dosya bulunduğu yerden siliniyor.
             }
+            return Upload(file, root);// Eski dosya silindikten sonra yerine geçecek yeni dosyaiçin alttaki *Upload* metoduna yeni dosya ve kayıt edileceği adres parametre olarak döndürülüyor.
         }
 
-        private static void DeleteOldImageFile(string filePath)
+        public string Upload(IFormFile file, string root, string customPath = "")
         {
-            if (File.Exists(filePath))
+            if (file.Length > 0)//file.Length=>Dosya uzunluğunu bayt olarak alır. burada Dosya gönderilmis mi gönderilmemiş diye test işlemi yapıldı.
             {
-                File.Delete(filePath);
+                if (!Directory.Exists(root + customPath))//Directory=>System.IO'nın bir class'ı. burada ki işlem tam olarak şu. Bu Upload metodumun parametresi olan string root CarManager'dan gelmekte
+                {                           //CarImageManager içerisine girdiğinizde buraya parametre olarak *PathConstants.ImagesPath* böyle bir şey gönderilidğini görürsünüz. PathConstants clası içerisine girdiğinizde string bir ifadeyle bir dizin adresi var
+                                            //O adres bizim Yükleyeceğimiz dosyaların kayıt edileceği adres burada *Check if a directory Exists* ifadesi şunu belirtiyor dosyanın kaydedileceği adres dizini var mı? varsa if yapısının kod bloğundan ayrılır eğer yoksa içinde ki kodda dosyaların kayıt edilecek dizini oluşturur
+                    Directory.CreateDirectory(root + customPath);
+                }
+                string extension = Path.GetExtension(file.FileName);//Path.GetExtension(file.FileName)=>> Seçmiş olduğumuz dosyanın uzantısını elde ediyoruz.
+                string guid = GuidHelper.CreateGuid();//Core.Utilities.Helpers.GuidHelper klasürünün içinde ki GuidManager klasörüne giderseniz burada satırda ne yaptığımızı anlayacaksınız
+                string filePath = customPath + guid + extension;//Dosyanın oluşturduğum adını ve uzantısını yan yana getiriyorum. Mesela metin dosyası ise .txt gibi bu projemizde resim yükyeceğimiz için .jpg olacak uzantılar 
+
+                using (FileStream fileStream = File.Create(root + filePath))//Burada en başta FileStrem class'ının bir örneği oluşturulu., sonrasında File.Create(root + newPath)=>Belirtilen yolda bir dosya oluşturur veya üzerine yazar. (root + newPath)=>Oluşturulacak dosyanın yolu ve adı.
+                {
+                    file.CopyTo(fileStream);//Kopyalanacak dosyanın kopyalanacağı akışı belirtti. yani yukarıda gelen IFromFile türündeki file dosyasınınnereye kopyalacağını söyledik.
+                    fileStream.Flush();//arabellekten siler.
+                    return filePath;//burada dosyamızın tam adını geri gönderiyoruz sebebide sql servere dosya eklenirken adı ile eklenmesi için.
+                }
             }
+            return null;
         }
     }
 }

@@ -1,6 +1,12 @@
-﻿using Business.Abstract;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Business.Abstract;
+using Entities.Concrete;
 
 namespace WebAPI.Controllers
 {
@@ -8,15 +14,16 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ColorsController : ControllerBase
     {
-        IColorService _colorService;
+        private IColorService _colorService;
+
         public ColorsController(IColorService colorService)
         {
-               _colorService = colorService;
+            _colorService = colorService;
         }
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-
             var result = _colorService.GetAll();
             if (result.Success)
             {
@@ -24,11 +31,44 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
-        {
 
-            var result = _colorService.GetById(id);
+        [HttpGet("getcolorbyid")]
+        public IActionResult GetColorById(int id)
+        {
+            var result = _colorService.GetColorById(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("add")]
+        public IActionResult Add(Color color)
+        {
+            var result = _colorService.Add(color);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("delete")]
+        public IActionResult Delete(Color color)
+        {
+            var result = _colorService.Delete(color);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update(Color color)
+        {
+            var result = _colorService.Update(color);
             if (result.Success)
             {
                 return Ok(result);

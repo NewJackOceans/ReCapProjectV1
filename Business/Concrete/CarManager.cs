@@ -5,6 +5,7 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
+using Core.Aspects.Performance;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -24,106 +25,94 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
+        IBrandService _brandService;
 
-        public CarManager(ICarDal carDal)
+        public CarManager(ICarDal carDal, IBrandService brandService)
         {
             _carDal = carDal;
-        }
-        //Claim
-        [SecuredOperation("product.add, admin")]
-        [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("ICarService.Add")]
-        public IResult Add(Car car)
-        {
-            IResult result = BusinessRules.Run(
-                CheckIfCarNameExists(car.Name));
-            //Validation
-                        
-            _carDal.Add(car);
-
-            return new SuccessResult(Messages.CarAdded);
-        }
-        [TransactionScopeAspect]
-        public IResult AddTransactionalTest(Car car)
-        {
-            
-            Add(car);
-            if (car.DailyPrice<450)
-            {
-                throw new Exception("");
-            }
-            Add(car);
-            return null;
+            _brandService = brandService;
 
         }
-        [SecuredOperation("admin")]
-        public IResult Delete(Car car)
-        {
-            _carDal.Delete(car);
-            return new SuccessResult(Messages.CarRemoved);
-        }
 
-        [CacheAspect] //key, value
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetAll()
         {
-            if (DateTime.Now.Hour == 3)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            }
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
 
-        public IDataResult<List<Car>> GetAllByCarId(int id)
+        public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int brandId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsByBrandId(brandId));
+
+        }
+        public IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount)
+        {
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(null, pageIndex, pageCount), Messages.CarPaging);
         }
 
-        public IDataResult<List<Car>> GetByBrandId(int id)
-        {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.Id == id));
-        }
-
-        public IDataResult<List<Car>> GetByColorId(int id)
-        {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(color => color.Id == id));
-        }
-
-        public IDataResult<List<Car>> GetByDailyPrice(decimal dailyPrice)
-        {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.DailyPrice == dailyPrice));
-        }
         [CacheAspect]
-        public IDataResult<Car> GetById(int carId)
+        public IDataResult<List<Car>> GetCarsById(int carId)
         {
-            return new SuccessDataResult<Car>(_carDal.Get(c=>c.Id == carId));
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.CarId == carId));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarsByColorId(int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsByColorId(colorId));
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
+            var result = new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarDetailsListed);
+            return result;
         }
 
-        public IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount)
+        [PerformanceAspect(5)]
+        [SecuredOperation("car.add,admin")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
+        public IResult Add(Car car)
         {
 
-            return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(null, pageIndex,pageCount), Messages.CarListed);
+            ValidationTool.Validate(new CarValidator(), car);
+
+            _carDal.Add(car);
+            return new SuccessResult(Messages.CarAdded);
         }
 
-        [SecuredOperation("admin")]
-        [CacheRemoveAspect("ICarService.Update")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
         }
-        private IResult CheckIfCarNameExists(string carName)
+
+
+        public IResult Delete(Car car)
         {
-            var result = _carDal.GetAll(c =>c.Name == carName).Any();
-            if (result)
-            {
-                return new ErrorResult(Messages.CarNameAlreadyExists);
-            }
-            return new SuccessResult();
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.CarDeleted);
+        }
+
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Car car)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByCarId(int carId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetailsByCarId(carId));
+
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColorAndByBrand(int colorId, int brandId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetailsByColorAndByBrand(colorId, brandId));
         }
     }
 }

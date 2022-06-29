@@ -1,56 +1,58 @@
-﻿using System;
+﻿using Core.Entities.Concrete;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Constants
 {
     public static class Messages
     {
-        public static string CarAdded = "Araba eklendi.";
-        public static string CarNameInvalid = "Araba ismi belirlenen kritelere uymuyor.";
-        public static string CarRemoved = "Araba sistemden silindi.";
-        public static string CarUpdated = "Araba güncellendi.";
-        public static string BrandAdded = "Marka eklendi."; 
-        public static string BrandNameInValid = "Marka ismi belirlenen kritelere uymuyor.";
-        public static string MaintenanceTime = "Bakım zamanı, en kısa sürede hizmetinizdeyiz.";
-        public static string BrandListed = "Markalar listelendi.";
-        public static string CarListed = "Arabalar listelendi.";
-        public static string CarImageListed = "Araba fotoğrafları listelendi.";
-        public static string ColorListed = "Tüm renklerdeki arabalar listelendi..";
-        public static string UserAdded = "Kullanıcı eklendi.";
-        public static string UserRemoved = "Kullanıcı sistemden silindi."; 
-        public static string UserUpdated = "Kullanıcı bilgileri güncellendi.";
-        public static string UserListed = "Kullanıcılar listelendi.";
-        public static string CustomerAdded = "Müşteri eklendi.";
-        public static string CustomerRemoved = "Müşteri sistemden silindi.";
-        public static string CustomerUpdated = "Müşteri bilgileri güncellendi.";
-        public static string CustomerListed = "Müşteriler listelendi."; 
-        public static string NotAvailableForRental = "Bu araç belirlenen tarihlerde kiralamaya uygun değildir.";
-        public static string RentalAdded = "Kiralama başarılı";
-        public static string RentalRemoved = "Kiralama iptal edildi.";
-        public static string RentalUpdated = "Kiralama tarihleri güncellendi.";
-        public static string RentalsListed = "Kiralama'da olan araçlar listelendi."; 
-        public static string CarNameAlreadyExists = "Eklemeye çalıştığınız araba mevcut.";
-        public static string CarImageAdded = "Araba fotoğrafı başarıyla eklenmiştir.";
-        public static string CarImageLimitsInvalid = "Bir araba için en fazla 5 tane fotoğraf yükleyebilirsiniz.";
-        public static string CarImageRemoved = "Araba fotoğrafı başarılı bir şekilde silinmiştir.";
-        public static string CarImageUpdated = "Araba fotoğrafı güncellenmiştir.";
-        public static string AuthorizationDenied = "Yetkilendirme başarısız.";
-        public static string UserRegistered = "Kullanıcı kaydı başarılı";
-        public static string UserNotFound = "Kullanıcı bulunamadı.";
-        public static string PasswordError = "Hatalı şifre.";
-        public static string SuccessfulLogin = "Giriş başarılı.";
-        public static string UserAlreadyExists = "Bu kullanıcı mevcut.";
-        public static string AccessTokenCreated = "";
-        public static string CarImageDeleted = "Araba fotoğrafı silindi.";
-        public static string CarImagesListed = "Araba fotoğrafları listelendi.";
-        public static string CarImageLimitExceded = "Araba için eklenebilecek(5) fotoğraf limiti aşıldı";
+        public static string CarAdded = "Car successfully Added!";
+        public static string CarUpdated = "Car successfully updated!";
+        public static string CarDeleted = "Car successfully deleted!";
+        public static string CarCondition = "Car description must be at least 2 characters or car daily price must be greater than 0. ";
+        public static string CarsListed = "Car listed!";
+        public static string CarDetailsListed = "Car details listed!";
+        public static string CarPaging = "Car paging.";
 
 
+        public static string MaintenanceTime = " System maintenance!";
+        public static string BrandAdded = "Brand successfully added";
+        public static string BrandUpdated = "Brand successfully updated";
+        public static string BrandDeleted = "Brand successfully deleted";
+        public static string BrandsListed = "Brands listed!";
 
+        public static string ColorAdded = "Color successfully added";
+        public static string ColorUpdated = "Color successfully updated";
+        public static string ColorDeleted = "Color successfully deleted";
+        public static string ColorsListed = "Colors listed!";
 
+        public static string UserAdded = "User successfully added";
+        public static string UserUpdated = "User successfully updated";
+        public static string UserDeleted = "User successfully deleted";
+        public static string UsersListed = "Users listed";
 
+        public static string RentalAdded = "Rental successfully added";
+        public static string RentalUpdated = "Rental successfully updated";
+        public static string RentalDeleted = "Rental successfully deleted";
+        public static string RentalsListed = "Rentals listed";
+
+        public static string CustomerAdded = "Customer successfully added";
+        public static string CustomerUpdated = "Customer successfully updated";
+        public static string CustomerDeleted = "Customer successfully deleted";
+        public static string CustomersListed = "Customers listed";
+
+        public static string CarRented = "The car has not been received yet.Please check for another car.";
+
+        public static string CarImageAdded = "Car image successfully added";
+
+        public static string AuthorizationDenied = "Authorization denied";
+        public static string UserRegistered = "User registered";
+        public static string UserNotFound = "User not found";
+        public static string PasswordError = "Password error";
+        public static string SuccessfulLogin = "Successful login";
+        public static string UserAlreadyExists = "User already exists";
+        public static string AccessTokenCreated = "Access token created";
     }
 }

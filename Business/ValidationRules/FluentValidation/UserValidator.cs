@@ -1,15 +1,22 @@
-﻿using Core.Entities.Concrete;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Core.Entities.Concrete;
 using Entities.Concrete;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.ValidationRules.FluentValidation
 {
     public class UserValidator : AbstractValidator<User>
     {
+        public UserValidator()
+        {
+            RuleFor(p => p.FirstName).MinimumLength(2);
+            RuleFor(p => p.FirstName).NotEmpty();
+            RuleFor(p => p.LastName).NotEmpty();
+            RuleFor(p => p.EMail).NotEmpty();
+            RuleFor(p => p.EMail).MinimumLength(2);
+
+        }
     }
 }

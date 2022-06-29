@@ -1,14 +1,21 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Core.Entities;
 
 namespace Entities.DTOs
 {
-    public class CarImageDetailDto : IDto
+    public class RentalDetailDto : IDto
     {
-        public string ImagePath { get; set; }
+        public int RentalId { get; set; }
+        public int CarId { get; set; }
+        public int BrandId { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerLastname { get; set; }
+        public string BrandName { get; set; }
+        public string ColorName { get; set; }
+        public DateTime RentDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
+
     }
 }

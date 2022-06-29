@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
@@ -12,21 +11,49 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class CardsController : ControllerBase
     {
-        private ICustomerService _costumerService;
+        ICardService _cardService;
 
-        public CustomersController(ICustomerService costumerService)
+        public CardsController(ICardService cardService)
         {
-            _costumerService = costumerService;
+            _cardService = cardService;
+        }
+        [HttpPost("add")]
+        public IActionResult Add(Card card)
+        {
+            var result = _cardService.Add(card);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("delete")]
+        public IActionResult Delete(Card card)
+        {
+            var result = _cardService.Delete(card);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("update")]
+        public IActionResult Update(Card card)
+        {
+            var result = _cardService.Update(card);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
-        [HttpGet("getall")]
+        [HttpGet("getAll")]
         public IActionResult GetAll()
         {
-            Thread.Sleep(1000);
-
-            var result = _costumerService.GetAll();
+            var result = _cardService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -34,43 +61,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getcustomerbyid")]
-        public IActionResult GetCustomerById(int customerId)
+        [HttpGet("GetById")]
+        public IActionResult GetById(int cardId)
         {
-            var result = _costumerService.GetCustomerById(customerId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("add")]
-        public IActionResult Add(Customer customer)
-        {
-            var result = _costumerService.Add(customer);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("delete")]
-        public IActionResult Delete(Customer customer)
-        {
-            var result = _costumerService.Delete(customer);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("Update")]
-        public IActionResult Update(Customer customer)
-        {
-            var result = _costumerService.Update(customer);
+            var result = _cardService.GetByCardId(cardId);
             if (result.Success)
             {
                 return Ok(result);

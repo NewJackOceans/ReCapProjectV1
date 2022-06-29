@@ -16,9 +16,9 @@ namespace DataAccess.Concrete.InMemory
         public InMemoryCarDal()
         {
             _cars = new List<Car> {
-                new Car {Id=1, BrandId=1, ColorId=2, ModelYear=2017, DailyPrice=8950, Description="Ferrari"},
-                new Car {Id=2, BrandId=2, ColorId=3, ModelYear=2020, DailyPrice=12500, Description="Volvo 360xc"},
-                new Car {Id=3, BrandId=3, ColorId=3, ModelYear=2020, DailyPrice=9950, Description="Ford Focus"}
+                new Car {CarId=1, BrandId=1, ColorId=2, ModelYear="2017", DailyPrice=8950, Description="Ferrari"},
+                new Car {CarId=2, BrandId=2, ColorId=3, ModelYear="2020", DailyPrice=12500, Description="Volvo 360xc"},
+                new Car {CarId=3, BrandId=3, ColorId=3, ModelYear="2020", DailyPrice=9950, Description="Ford Focus"}
             };
         }
 
@@ -29,7 +29,7 @@ namespace DataAccess.Concrete.InMemory
 
         public void Delete(Car car)
         {
-            Car carToDelete = _cars.SingleOrDefault(c=>c.Id==car.Id);
+            Car carToDelete = _cars.SingleOrDefault(c=>c.CarId==car.CarId);
         }
 
         public void Display()
@@ -54,7 +54,7 @@ namespace DataAccess.Concrete.InMemory
 
         public List<Car> GetAllByCarId(int carId)
         {
-            return _cars.Where(c=>c.Id!=carId).ToList();
+            return _cars.Where(c=>c.CarId!=carId).ToList();
         }
 
         public List<CarDetailDto> GetCarDetails()
@@ -67,6 +67,26 @@ namespace DataAccess.Concrete.InMemory
             throw new NotImplementedException();
         }
 
+        public List<CarDetailDto> GetCarDetailsByCarId(int carId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetailsByColorAndByBrand(int colorId, int brandId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarsByBrandId(int brandId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarsByColorId(int colorId)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Car> GetForPageable(Expression<Func<Car, bool>> filter = null, int pageIndex = 0, int pageCount = 20)
         {
             throw new NotImplementedException();
@@ -74,8 +94,8 @@ namespace DataAccess.Concrete.InMemory
 
         public void Update(Car car)
         {
-            Car carToUpdate = _cars.SingleOrDefault(c => c.Id == car.Id);
-            carToUpdate.Id = car.Id;
+            Car carToUpdate = _cars.SingleOrDefault(c => c.CarId == car.CarId);
+            carToUpdate.CarId = car.CarId;
             carToUpdate.BrandId = car.BrandId;
             carToUpdate.ModelYear = car.ModelYear;
             carToUpdate.DailyPrice = car.DailyPrice;

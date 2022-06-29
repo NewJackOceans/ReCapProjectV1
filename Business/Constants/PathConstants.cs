@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Constants
 {
-    public class PathConstant
+    public class PathConstants
     {
         public static string ImagesPath = "wwwroot\\Uploads\\Images\\";
     }

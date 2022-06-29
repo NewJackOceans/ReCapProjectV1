@@ -1,8 +1,12 @@
-﻿using Business.Abstract;
-using Core.Entities.Concrete;
-using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Business.Abstract;
+using Core.Entities.Concrete;
 
 namespace WebAPI.Controllers
 {
@@ -10,15 +14,17 @@ namespace WebAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        IUserService _userService;
+        private IUserService _userService;
+
         public UsersController(IUserService userService)
         {
             _userService = userService;
-
         }
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
+            Thread.Sleep(1000);
 
             var result = _userService.GetAll();
             if (result.Success)
@@ -27,28 +33,17 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("getallbyuserid")]
-        public IActionResult GetAllByUserId(int userId)
+        [HttpGet("getuserbyid")]
+        public IActionResult GetUserById(int userId)
         {
-
-            var result = _userService.GetAllByUserId(userId);
+            var result = _userService.GetUserById(userId);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
-        {
-            var result = _userService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
 
-        }
         [HttpPost("add")]
         public IActionResult Add(User user)
         {
@@ -58,19 +53,8 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
-
         }
-        [HttpPost("delete")]
-        public IActionResult Delete(User user)
-        {
-            var result = _userService.Delete(user);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
 
-        }
         [HttpPost("update")]
         public IActionResult Update(User user)
         {
@@ -80,7 +64,17 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
 
+        [HttpPost("delete")]
+        public IActionResult Delete(User user)
+        {
+            var result = _userService.Delete(user);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }
