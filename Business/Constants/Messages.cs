@@ -59,5 +59,10 @@ namespace Business.Constants
 
         public static string CardPaging { get; internal set; }
         public static string CarImagePaging { get; internal set; }
+        public static string ColorPaging { get; internal set; }
+        public static string CustomerPaging { get; internal set; }
+        public static string PaymentPaging { get; internal set; }
+        public static string RentalPaging { get; internal set; }
+        public static string UserPaging { get; internal set; }
     }
 }

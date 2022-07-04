@@ -22,26 +22,15 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int colorId, [FromQuery] string colorName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
-            var result = _colorService.GetAll();
+            var result = _colorService.Search(colorName, colorId, pageIndex, pageCount);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
-        }
-
-        [HttpGet("getcolorbyid")]
-        public IActionResult GetColorById(int id)
-        {
-            var result = _colorService.GetColorById(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        }      
 
         [HttpPost("add")]
         public IActionResult Add(Color color)

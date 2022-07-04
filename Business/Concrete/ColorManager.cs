@@ -11,6 +11,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,11 +29,6 @@ namespace Business.Concrete
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorsListed);
-        }
-
-        public IDataResult<List<Color>> GetColorById(int id)
-        {
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(p => p.ColorId == id), Messages.ColorsListed);
         }
 
         [ValidationAspect(typeof(ColorValidator))]
@@ -53,6 +49,19 @@ namespace Business.Concrete
         {
             _colorDal.Delete(color);
             return new SuccessResult(Messages.ColorDeleted);
+        }
+
+        public IDataResult<List<Color>> GetForPageable(int pageIndex, int pageCount)
+        {
+            return new SuccessDataResult<List<Color>>(_colorDal.GetForPageable(null, pageIndex, pageCount), Messages.ColorPaging);
+        }
+
+        public IDataResult<List<Color>> Search(string colorName, int colorId, int pageIndex, int pageCount)
+        {
+            Expression<Func<Color, bool>> searchQuery = color =>
+            (!string.IsNullOrWhiteSpace(colorName) ? color.ColorName.Contains(colorName) : true) &&
+            (colorId > 0 ? color.ColorId == colorId : true);
+            return new SuccessDataResult<List<Color>>(_colorDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.ColorPaging);
         }
     }
 }

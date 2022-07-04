@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using Business.Abstract;
 using Business.Constants;
@@ -31,11 +32,6 @@ namespace Business.Concrete
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalsListed);
-        }
-
-        public IDataResult<List<Rental>> GetRentalById(int rentalId)
-        {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r => r.CarId == rentalId));
         }
 
         public IDataResult<List<RentalDetailDto>> GetRentalsDetails()
@@ -87,6 +83,22 @@ namespace Business.Concrete
 
 
             return totalAmount;
+        }
+
+        public IDataResult<List<Rental>> GetForPageable(int pageIndex, int pageCount)
+        {
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetForPageable(null, pageIndex, pageCount), Messages.RentalPaging);
+        }
+
+        public IDataResult<List<Rental>> Search(int id, int carId, int customerId, DateTime rentDate, DateTime returnDate, int pageIndex, int pageCount)
+        {
+            Expression<Func<Rental, bool>> searchQuery = rental =>
+            (rentDate == null ? rental.RentDate == rentDate : true) &&
+            (returnDate == null ? rental.ReturnDate == returnDate : true) &&
+            (id > 0 ? rental.Id == id : true) &&
+            (carId > 0 ? rental.CarId == carId : true) &&
+            (customerId > 0 ? rental.CustomerId == customerId : true);
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.RentalPaging);
         }
     }
 }

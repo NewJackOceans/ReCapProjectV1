@@ -51,9 +51,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getAll")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int paymentId, [FromQuery] int customerId, int pageIndex = 0, int pageCount = 20)
         {
-            var result = _paymentService.GetAll();
+            var result = _paymentService.Search(paymentId, customerId, pageIndex, pageCount);
             if (result.Success)
             {
                 return Ok(result);
@@ -61,15 +61,6 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("GetById")]
-        public IActionResult GetById(int paymentId)
-        {
-            var result = _paymentService.GetByPaymentId(paymentId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        
     }
 }

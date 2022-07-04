@@ -22,22 +22,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int customerId, [FromQuery] int userId, [FromQuery] string companyName = "", int pageIndex = 0, int pageCount = 20)
         {
             Thread.Sleep(1000);
 
-            var result = _costumerService.GetAll();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getcustomerbyid")]
-        public IActionResult GetCustomerById(int customerId)
-        {
-            var result = _costumerService.GetCustomerById(customerId);
+            var result = _costumerService.Search(companyName, customerId, userId, pageIndex, pageCount);
             if (result.Success)
             {
                 return Ok(result);

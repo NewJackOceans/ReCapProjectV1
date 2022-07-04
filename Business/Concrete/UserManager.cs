@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using Business.Abstract;
 using Business.Constants;
@@ -31,17 +32,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UsersListed);
         }
 
-        public IDataResult<List<User>> GetUserById(int id)
-        {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(p => p.Id == id), Messages.ColorsListed);
-
-        }
-
-        public User GetByMail(string email)
-        {
-            return _userDal.Get(u => u.EMail == email);
-        }
-
         [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
@@ -61,6 +51,26 @@ namespace Business.Concrete
         {
             _userDal.Delete(user);
             return new SuccessResult(Messages.UserDeleted);
+        }
+        public User GetByMail(string email)
+        {
+            return _userDal.Get(u => u.EMail == email);
+        }
+
+        public IDataResult<List<User>> GetForPageable(int pageIndex, int pageCount)
+        {
+            return new SuccessDataResult<List<User>>(_userDal.GetForPageable(null, pageIndex, pageCount), Messages.UserPaging);
+        }
+
+        public IDataResult<List<User>> Search(int id, bool status, string firstName, string lastName, string email, int pageIndex, int pageCount)
+        {
+            Expression<Func<User, bool>> searchQuery = user =>
+            (!string.IsNullOrWhiteSpace(firstName) ? user.FirstName.Contains(firstName) : true) &&
+            (!string.IsNullOrWhiteSpace(lastName) ? user.LastName.Contains(lastName) : true) &&
+            (!string.IsNullOrWhiteSpace(email) ? user.EMail.Contains(email) : true) &&
+            (id > 0 ? user.Id == id : true) &&
+            (status != null ? user.Status == status : true) ;
+            return new SuccessDataResult<List<User>>(_userDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.UserPaging);
         }
     }
 }

@@ -17,6 +17,7 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,28 +42,13 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int brandId)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsByBrandId(brandId));
-
-        }
+        
         public IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount)
         {
 
             return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(null, pageIndex, pageCount), Messages.CarPaging);
         }
-
-        [CacheAspect]
-        public IDataResult<List<Car>> GetCarsById(int carId)
-        {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.CarId == carId));
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarsByColorId(int colorId)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsByColorId(colorId));
-        }
-
+        
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             var result = new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarDetailsListed);
@@ -110,9 +96,14 @@ namespace Business.Concrete
 
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarDetailsByColorAndByBrand(int colorId, int brandId)
+        public IDataResult<List<Car>> Search(string modelYear, int carId, int colorId, int brandId, int pageIndex, int pageCount)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetailsByColorAndByBrand(colorId, brandId));
+            Expression<Func<Car, bool>> searchQuery = car =>
+            (!string.IsNullOrWhiteSpace(modelYear) ? car.ModelYear.Contains(modelYear) : true) &&
+            (carId > 0 ? car.CarId == carId : true) &&
+            (brandId > 0 ? car.BrandId == brandId : true) &&
+            (colorId > 0 ? car.ColorId == colorId : true);
+            return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CarPaging);
         }
     }
 }

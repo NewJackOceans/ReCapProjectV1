@@ -22,11 +22,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int customerId, [FromQuery] DateTime rentDate,[FromQuery] DateTime retunrDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             Thread.Sleep(1000);
 
-            var result = _rentalService.GetAll();
+            var result = _rentalService.Search(id, carId, customerId, rentDate, retunrDate, pageIndex, pageCount);
             if (result.Success)
             {
                 return Ok(result);
@@ -38,17 +38,6 @@ namespace WebAPI.Controllers
         public IActionResult GetRentalsDetails()
         {
             var result = _rentalService.GetRentalsDetails();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getrentalbyid")]
-        public IActionResult GetRentalById(int rentalId)
-        {
-            var result = _rentalService.GetRentalById(rentalId);
             if (result.Success)
             {
                 return Ok(result);

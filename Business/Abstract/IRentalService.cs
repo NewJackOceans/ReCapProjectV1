@@ -12,8 +12,9 @@ namespace Business.Abstract
     public interface IRentalService
     {
         IDataResult<List<Rental>> GetAll();
-        IDataResult<List<Rental>> GetRentalById(int rentalId);
         IDataResult<List<RentalDetailDto>> GetRentalsDetails();
+        IDataResult<List<Rental>> GetForPageable(int pageIndex, int pageCount);
+        IDataResult<List<Rental>> Search(int id, int carId, int customerId, DateTime rentDate, DateTime returnDate, int pageIndex, int pageCount);
         IResult Add(Rental rental);
         IResult Update(Rental rental);
         IResult Delete(Rental rental);

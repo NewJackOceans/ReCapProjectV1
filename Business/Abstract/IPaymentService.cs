@@ -13,6 +13,7 @@ namespace Business.Abstract
         IResult Update(Payment payment);
 
         IDataResult<List<Payment>> GetAll();
-        IDataResult<Payment> GetByPaymentId(int paymentId);
+        IDataResult<List<Payment>> GetForPageable(int pageIndex, int pageCount);
+        IDataResult<List<Payment>> Search(int paymentId, int customerId, int pageIndex, int pageCount);
     }
 }

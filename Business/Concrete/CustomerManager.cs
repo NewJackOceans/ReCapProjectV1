@@ -11,6 +11,7 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,11 +29,6 @@ namespace Business.Concrete
         public IDataResult<List<Customer>> GetAll()
         {
             return new SuccessDataResult<List<Customer>>(_costumerDal.GetAll(), Messages.CustomersListed);
-        }
-
-        public IDataResult<List<Customer>> GetCustomerById(int customerId)
-        {
-            return new SuccessDataResult<List<Customer>>(_costumerDal.GetAll(c => c.CustomerId == customerId));
         }
 
         [ValidationAspect(typeof(CustomerValidator))]
@@ -54,6 +50,20 @@ namespace Business.Concrete
         {
             _costumerDal.Delete(customer);
             return new SuccessResult(Messages.CustomerDeleted);
+        }
+
+        public IDataResult<List<Customer>> GetForPageable(int pageIndex, int pageCount)
+        {
+            return new SuccessDataResult<List<Customer>>(_costumerDal.GetForPageable(null, pageIndex, pageCount), Messages.CustomerPaging);
+        }
+
+        public IDataResult<List<Customer>> Search(string companyName, int customerId, int userId, int pageIndex, int pageCount)
+        {
+            Expression<Func<Customer, bool>> searchQuery = customer =>
+            (!string.IsNullOrWhiteSpace(companyName) ? customer.CompanyName.Contains(companyName) : true) &&
+            (customerId > 0 ? customer.CustomerId == customerId : true) &&
+            (userId > 0 ? customer.UserId == userId : true);
+            return new SuccessDataResult<List<Customer>>(_costumerDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CustomerPaging);
         }
     }
 }
