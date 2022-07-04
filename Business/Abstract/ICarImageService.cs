@@ -16,7 +16,7 @@ namespace Business.Abstract
         IResult Delete(CarImage carImage);
         IResult Update(IFormFile file, CarImage carImage);
         IDataResult<List<CarImage>> GetAll();
-        IDataResult<List<CarImage>> GetByImageId(int id);
+        IDataResult<List<CarImage>> GetByImageId(int id); // Fotoğraf silerken kullanıyorum.
         IDataResult<List<CarImage>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<CarImage>> Search(int id, int carId, int pageIndex, int pageCount);
 

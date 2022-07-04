@@ -20,5 +20,6 @@ namespace Business.Abstract
         IResult AddTransactionalTest(Car car);
         IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<Car>> Search(string modelYear, int carId, int colorId, int brandId, int pageIndex, int pageCount);
+
     }
 }

@@ -45,7 +45,6 @@ namespace Business.Concrete
         
         public IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount)
         {
-
             return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(null, pageIndex, pageCount), Messages.CarPaging);
         }
         
@@ -105,5 +104,7 @@ namespace Business.Concrete
             (colorId > 0 ? car.ColorId == colorId : true);
             return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CarPaging);
         }
+
+        
     }
 }
