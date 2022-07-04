@@ -24,9 +24,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int brandId, [FromQuery] string brandName="", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount=20)
         {
-            var result = _brandService.GetAll();
+            var result = _brandService.Search(brandName, brandId, pageIndex, pageCount);
             if (result.Success)
             {
                 return Ok(result);
@@ -34,16 +34,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbrandbyid")]
-        public IActionResult GetBrandById(int id)
-        {
-            var result = _brandService.GetBrandById(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        
 
         [HttpPost("add")]
         public IActionResult Add(Brand brand)

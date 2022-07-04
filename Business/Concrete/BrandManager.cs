@@ -13,6 +13,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,11 +39,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandsListed);
         }
 
-        public IDataResult<List<Brand>> GetBrandById(int id)
-        {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(p => p.BrandId == id));
-        }
-
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
@@ -61,6 +57,19 @@ namespace Business.Concrete
         {
             _brandDal.Delete(brand);
             return new SuccessResult(Messages.BrandDeleted);
+        }
+
+        public IDataResult<List<Brand>> GetForPageable(int pageIndex, int pageSize)
+        {
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(null, pageIndex, pageSize), Messages.BrandPaging);
+        }
+
+        public IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageSize)
+        {
+            Expression<Func<Brand, bool>> searchQuery = brand =>
+            (!string.IsNullOrWhiteSpace(brandName) ? brand.BrandName.Contains(brandName) : true) &&
+            (brandId > 0 ? brand.BrandId == brandId : true);
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(searchQuery, pageIndex, pageSize), Messages.BrandPaging);
         }
     }
 }
