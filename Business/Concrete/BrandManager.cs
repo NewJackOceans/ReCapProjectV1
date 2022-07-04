@@ -59,17 +59,17 @@ namespace Business.Concrete
             return new SuccessResult(Messages.BrandDeleted);
         }
 
-        public IDataResult<List<Brand>> GetForPageable(int pageIndex, int pageSize)
+        public IDataResult<List<Brand>> GetForPageable(int pageIndex, int pageCount)
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(null, pageIndex, pageSize), Messages.BrandPaging);
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(null, pageIndex, pageCount), Messages.BrandPaging);
         }
 
-        public IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageSize)
+        public IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageCount)
         {
             Expression<Func<Brand, bool>> searchQuery = brand =>
             (!string.IsNullOrWhiteSpace(brandName) ? brand.BrandName.Contains(brandName) : true) &&
             (brandId > 0 ? brand.BrandId == brandId : true);
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(searchQuery, pageIndex, pageSize), Messages.BrandPaging);
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.BrandPaging);
         }
     }
 }

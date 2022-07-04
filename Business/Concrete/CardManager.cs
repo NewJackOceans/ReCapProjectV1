@@ -1,10 +1,12 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,9 +43,18 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Card>>(_cardDal.GetAll());
         }
 
-        public IDataResult<Card> GetByCardId(int cardId)
+        public IDataResult<List<Card>> GetForPageable(int pageIndex, int pageCount)
         {
-            return new SuccessDataResult<Card>(_cardDal.Get(c => c.CardId == cardId));
+            return new SuccessDataResult<List<Card>>(_cardDal.GetForPageable(null, pageIndex, pageCount), Messages.CardPaging);
+        }
+
+        public IDataResult<List<Card>> Search(string ownerName, int cardId, int customerId, int pageIndex, int pageCount)
+        {
+            Expression<Func<Card, bool>> searchQuery = card =>
+            (!string.IsNullOrWhiteSpace(ownerName) ? card.OwnerName.Contains(ownerName) : true) &&
+            (cardId > 0 ? card.CardId == cardId : true) &&
+            (customerId > 0 ? card.CustomerId == customerId : true);
+            return new SuccessDataResult<List<Card>>(_cardDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CardPaging);
         }
     }
 }

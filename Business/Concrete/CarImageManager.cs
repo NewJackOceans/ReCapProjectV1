@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,27 +50,13 @@ namespace Business.Concrete
             carImage.ImagePath = _fileHelper.Update(file, PathConstants.ImagesPath + carImage.ImagePath, PathConstants.ImagesPath);
             _carImageDal.Update(carImage);
             return new SuccessResult();
-        }
-
-        public IDataResult<List<CarImage>> GetByCarId(int carId)
-        {
-            var result = BusinessRules.Run(CheckCarImage(carId));
-            if (result != null)
-            {
-                return new ErrorDataResult<List<CarImage>>(GetDefaultImage(carId).Data);
-            }
-            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(c => c.CarId == carId));
-        }
-
-        public IDataResult<CarImage> GetByImageId(int imageId)
-        {
-            return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == imageId));
-        }
+        }       
 
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
+
         private IResult CheckIfCarImageLimit(int carId)
         {
             var result = _carImageDal.GetAll(c => c.CarId == carId).Count;
@@ -93,6 +80,25 @@ namespace Business.Concrete
                 return new SuccessResult();
             }
             return new ErrorResult();
+        }
+
+        public IDataResult<List<CarImage>> GetForPageable(int pageIndex, int pageCount)
+        {
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetForPageable(null, pageIndex, pageCount), Messages.CarImagePaging);
+        }
+
+        public IDataResult<List<CarImage>> Search(int id, int carId, int pageIndex, int pageCount)
+        {
+            Expression<Func<CarImage, bool>> searchQuery = carImage =>
+            (id > 0 ? carImage.Id == id : true) &&
+            (carId > 0 ? carImage.CarId == carId : true);
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CarImagePaging);
+
+        }
+
+        public IDataResult<List<CarImage>> GetByImageId(int id)
+        {
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(c => c.Id == id));
         }
     }
 }

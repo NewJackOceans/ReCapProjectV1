@@ -12,8 +12,8 @@ namespace Business.Abstract
     public interface IBrandService
     {
         IDataResult<List<Brand>> GetAll();
-        IDataResult<List<Brand>> GetForPageable(int pageIndex, int pageSize);
-        IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageSize);
+        IDataResult<List<Brand>> GetForPageable(int pageIndex, int pageCount);
+        IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageCount);
         IResult Add(Brand brand);
         IResult Update(Brand brand);
         IResult Delete(Brand brand);

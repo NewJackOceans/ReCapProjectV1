@@ -56,5 +56,8 @@ namespace Business.Constants
         public static string AccessTokenCreated = "Access token created";
 
         public static string BrandPaging = "Brand Paging";
+
+        public static string CardPaging { get; internal set; }
+        public static string CarImagePaging { get; internal set; }
     }
 }

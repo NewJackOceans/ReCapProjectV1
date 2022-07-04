@@ -51,9 +51,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getAll")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int cardId, [FromQuery] int customerId, [FromQuery] string ownerName="", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 20)
         {
-            var result = _cardService.GetAll();
+            var result = _cardService.Search(ownerName, cardId, customerId, pageIndex, pageSize);
             if (result.Success)
             {
                 return Ok(result);
@@ -61,15 +61,6 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("GetById")]
-        public IActionResult GetById(int cardId)
-        {
-            var result = _cardService.GetByCardId(cardId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        
     }
 }
