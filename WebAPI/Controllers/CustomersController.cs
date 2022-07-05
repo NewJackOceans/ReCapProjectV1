@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Customers;
 
 namespace WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebAPI.Controllers
             _costumerService = costumerService;
         }
 
-        [HttpGet("getall")]
+        [HttpGet]
         public IActionResult GetAll([FromQuery] int customerId, [FromQuery] int userId, [FromQuery] string companyName = "", int pageIndex = 0, int pageCount = 20)
         {
             Thread.Sleep(1000);
@@ -34,7 +35,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public IActionResult Add(Customer customer)
         {
             var result = _costumerService.Add(customer);
@@ -45,10 +46,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("delete")]
-        public IActionResult Delete(Customer customer)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var result = _costumerService.Delete(customer);
+            var result = _costumerService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -56,10 +57,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("Update")]
-        public IActionResult Update(Customer customer)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateCustomerRequest request)
         {
-            var result = _costumerService.Update(customer);
+            var result = _costumerService.Update(id, request);
             if (result.Success)
             {
                 return Ok(result);

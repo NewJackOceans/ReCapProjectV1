@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Core.Entities.Concrete;
+using Core.Entities.Requests.Users;
 
 namespace WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet("getall")]
+        [HttpGet]
         public IActionResult GetAll([FromQuery] int id, [FromQuery] bool status, [FromQuery] string firstName = "", [FromQuery] string lastName = "", [FromQuery] string email = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount=20)
         {
 
@@ -33,7 +34,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public IActionResult Add(User user)
         {
             var result = _userService.Add(user);
@@ -44,10 +45,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(User user)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateUserRequest request)
         {
-            var result = _userService.Update(user);
+            var result = _userService.Update(id, request);
             if (result.Success)
             {
                 return Ok(result);
@@ -55,10 +56,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("delete")]
-        public IActionResult Delete(User user)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var result = _userService.Delete(user);
+            var result = _userService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);

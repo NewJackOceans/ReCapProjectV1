@@ -8,6 +8,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using Entities.DTOs;
+using Entities.Requests.Colors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,15 +40,26 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ColorAdded);
         }
 
-        public IResult Update(Color color)
+        public IResult Update(int id, UpdateColorRequest request)
         {
-            _colorDal.Update(color);
-            return new SuccessResult(Messages.ColorUpdated);
+            var color = _colorDal.Get(color => color.ColorId == id);
+            if (color != null)
+            {
+                color.ColorName = request.ColorName;
+                _colorDal.Update(color);
+                return new SuccessResult(Messages.ColorUpdated);
+            }
+            else
+                return new ErrorResult(Messages.ColorNotUpdated);
+            
         }
 
-        public IResult Delete(Color color)
+        public IResult Delete(int id)
         {
-            _colorDal.Delete(color);
+            var color = _colorDal.Get(color => color.ColorId == id);
+            if(color != null)
+                _colorDal.Delete(color);
+
             return new SuccessResult(Messages.ColorDeleted);
         }
 
@@ -62,6 +74,16 @@ namespace Business.Concrete
             (!string.IsNullOrWhiteSpace(colorName) ? color.ColorName.Contains(colorName) : true) &&
             (colorId > 0 ? color.ColorId == colorId : true);
             return new SuccessDataResult<List<Color>>(_colorDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.ColorPaging);
+        }
+
+        public IDataResult<Color> GetById(int id)
+        {
+            var color = _colorDal.Get(color => color.ColorId == id);
+            if (color == null)
+            {
+                return new ErrorDataResult<Color>(Messages.NotFoundColor);
+            }
+            return new SuccessDataResult<Color>(color);
         }
     }
 }

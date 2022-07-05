@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Payments;
 
 namespace WebAPI.Controllers
 {
@@ -19,7 +20,7 @@ namespace WebAPI.Controllers
         {
             _paymentService = paymentService;
         }
-        [HttpPost("add")]
+        [HttpPost]
         public IActionResult Add(Payment payment)
         {
             var result = _paymentService.Add(payment);
@@ -29,20 +30,20 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPost("delete")]
-        public IActionResult Delete(Payment payment)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var result = _paymentService.Delete(payment);
+            var result = _paymentService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpPost("update")]
-        public IActionResult Update(Payment payment)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdatePaymentRequest request)
         {
-            var result = _paymentService.Update(payment);
+            var result = _paymentService.Update(id, request);
             if (result.Success)
             {
                 return Ok(result);
@@ -50,7 +51,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getAll")]
+        [HttpGet]
         public IActionResult GetAll([FromQuery] int paymentId, [FromQuery] int customerId, int pageIndex = 0, int pageCount = 20)
         {
             var result = _paymentService.Search(paymentId, customerId, pageIndex, pageCount);

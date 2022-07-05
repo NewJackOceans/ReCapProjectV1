@@ -12,6 +12,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using Entities.Requests.Rentals;
 
 namespace Business.Concrete
 {
@@ -48,15 +49,27 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalAdded);
         }
 
-        public IResult Update(Rental rental)
+        public IResult Update(int id, UpdateRentalRequest request)
         {
-            _rentalDal.Update(rental);
-            return new SuccessResult(Messages.RentalUpdated);
+            var rental = _rentalDal.Get(rental => rental.Id == id);
+            if (rental != null)
+            {
+                rental.CarId = request.CarId;
+                rental.CustomerId = request.CustomerId;
+                rental.RentDate = request.RentDate;
+                rental.ReturnDate = request.ReturnDate;
+                _rentalDal.Update(rental);
+                return new SuccessResult(Messages.RentalUpdated);
+            }
+            else
+                return new ErrorResult(Messages.RentalNotUpdated);
         }
 
-        public IResult Delete(Rental rental)
+        public IResult Delete(int id)
         {
-            _rentalDal.Update(rental);
+            var rental = _rentalDal.Get(rental => rental.Id == id);
+            if(rental != null)
+                _rentalDal.Update(rental);
             return new SuccessResult(Messages.RentalUpdated);
         }
 

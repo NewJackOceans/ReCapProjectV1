@@ -8,6 +8,7 @@ using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Customers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,15 +41,25 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CustomerAdded);
         }
 
-        public IResult Update(Customer customer)
+        public IResult Update(int id, UpdateCustomerRequest request)
         {
-            _costumerDal.Update(customer);
-            return new SuccessResult(Messages.CustomerUpdated);
+            var customer = _costumerDal.Get(customer => customer.CustomerId == id);
+            if (customer != null)
+            {
+                customer.UserId = request.UserId;
+                customer.CompanyName = request.CompanyName;
+                _costumerDal.Update(customer);
+                return new SuccessResult(Messages.CustomerUpdated);
+            }
+            else
+                return new ErrorResult(Messages.CustomerNotUpdated);
         }
 
-        public IResult Delete(Customer customer)
+        public IResult Delete(int id)
         {
-            _costumerDal.Delete(customer);
+            var customer = _costumerDal.Get(customer => customer.UserId == id);
+            if(customer != null)
+                _costumerDal.Delete(customer);
             return new SuccessResult(Messages.CustomerDeleted);
         }
 

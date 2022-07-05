@@ -16,6 +16,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Requests.Brands;
 
 
 
@@ -47,15 +48,27 @@ namespace Business.Concrete
             return new SuccessResult(Messages.BrandAdded);
         }
 
-        public IResult Update(Brand brand)
+        public IResult Update(int id, UpdateBrandRequest request)
         {
-            _brandDal.Update(brand);
-            return new SuccessResult(Messages.BrandUpdated);
+            var brand = _brandDal.Get(brand => brand.BrandId == id);
+            if (brand != null)
+            {   
+
+                brand.BrandName = request.BrandName;
+                _brandDal.Update(brand);
+                return new SuccessResult(Messages.BrandUpdated);
+            }
+            else            
+                return new ErrorResult(Messages.BrandNotUpdated);
+            
         }
 
-        public IResult Delete(Brand brand)
+        public IResult Delete(int id)
         {
-            _brandDal.Delete(brand);
+            var brand = _brandDal.Get(brand => brand.BrandId == id);
+            if (brand != null)
+                _brandDal.Delete(brand);
+
             return new SuccessResult(Messages.BrandDeleted);
         }
 
@@ -70,6 +83,28 @@ namespace Business.Concrete
             (!string.IsNullOrWhiteSpace(brandName) ? brand.BrandName.Contains(brandName) : true) &&
             (brandId > 0 ? brand.BrandId == brandId : true);
             return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.BrandPaging);
+        }
+
+        
+
+        public IDataResult<Brand> GetById(int id)
+        {
+            var brand = _brandDal.Get(brand => brand.BrandId == id);
+            if (brand == null)
+            {
+                return new ErrorDataResult<Brand>(Messages.NotFoundBrand);
+            }
+            return new SuccessDataResult<Brand>(brand);
+        }
+
+        public IResult CheckBrandId(int id)
+        {
+            if (_brandDal.Get(brand => brand.BrandId == id) == null)
+            {
+                throw new Exception(Messages.BrandIdNotAvailable);
+            }
+            return new SuccessResult();
+
         }
     }
 }

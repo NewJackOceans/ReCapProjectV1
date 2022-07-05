@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Requests.CarImages;
 
 namespace WebAPI.Controllers
 {
@@ -18,7 +19,7 @@ namespace WebAPI.Controllers
         {
             _carImageService = carImageService;
         }
-        [HttpPost("add")]
+        [HttpPost]
         public IActionResult Add([FromForm] IFormFile file, [FromForm] CarImage carImage)
         {
             var result = _carImageService.Add(file, carImage);
@@ -28,28 +29,27 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPost("delete")]
-        public IActionResult Delete([FromForm] CarImage carImage)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var carDeleteImage = _carImageService.GetByImageId(carImage.Id).Data;
-            var result = _carImageService.Delete(carImage);
+            var result = _carImageService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpPost("update")]
-        public IActionResult Update([FromForm] IFormFile file, [FromForm] CarImage carImage)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute]int id, [FromForm] IFormFile file)
         {
-            var result = _carImageService.Update(file, carImage);
+            var result = _carImageService.Update(id, file);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpGet("getall")]
+        [HttpGet]
         public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             var result = _carImageService.Search(id, carId, pageIndex, pageCount);

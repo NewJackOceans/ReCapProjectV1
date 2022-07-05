@@ -3,6 +3,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Cards;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,15 +28,30 @@ namespace Business.Concrete
             return new SuccessResult("Card Added");
         }
 
-        public IResult Delete(Card card)
+        public IResult Delete(int id)
         {
-            _cardDal.Delete(card);
+            var card = _cardDal.Get(card => card.CardId == id);
+            if (card != null)
+                _cardDal.Delete(card);
             return new SuccessResult("Card Deleted");
         }
 
-        public IResult Update(Card card)
+        public IResult Update(int id, UpdateCardRequest request)
         {
-            return new SuccessResult("Card updated");
+            var card = _cardDal.Get(card => card.CardId == id);
+            if (card != null)
+            {
+                card.CreditCardNumber = request.CreditCardNumber;
+                card.ExpirationDate = request.ExpirationDate;
+                card.OwnerName = request.OwnerName;
+                card.CustomerId = request.CustomerId;
+                card.SecurityCode = request.SecurityCode;
+                _cardDal.Update(card);
+                return new SuccessResult(Messages.CardUpdated);
+            }
+            else
+                return new ErrorResult(Messages.CardNotUpdated);
+            
         }
 
         public IDataResult<List<Card>> GetAll()

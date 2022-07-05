@@ -1,6 +1,7 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.DTOs;
+using Entities.Requests.Colors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,11 @@ namespace Business.Abstract
     public interface IColorService
     {
         IDataResult<List<Color>> GetAll();
+        IDataResult<Color> GetById(int id);
         IDataResult<List<Color>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<Color>> Search(string colorName, int colorId, int pageIndex, int pageCount);
         IResult Add(Color color);
-        IResult Update(Color color);
-        IResult Delete(Color color);
+        IResult Update(int id, UpdateColorRequest request);
+        IResult Delete(int id);
     }
 }

@@ -5,6 +5,7 @@ using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Requests.CarImages;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -39,17 +40,28 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarImageAdded);
         }
 
-        public IResult Delete(CarImage carImage)
+        public IResult Delete(int id)
         {
-            _fileHelper.Delete(PathConstants.ImagesPath + carImage.ImagePath);
-            _carImageDal.Delete(carImage);
-            return new SuccessResult();
+            var carImage = _carImageDal.Get(carImage => carImage.Id == id);
+            if (carImage != null)
+                _carImageDal.Delete(carImage);
+                        
+            return new SuccessResult(Messages.CarImageDeleted);
         }
-        public IResult Update(IFormFile file, CarImage carImage)
+        public IResult Update(int id, IFormFile file)
         {
-            carImage.ImagePath = _fileHelper.Update(file, PathConstants.ImagesPath + carImage.ImagePath, PathConstants.ImagesPath);
-            _carImageDal.Update(carImage);
-            return new SuccessResult();
+            var carImage = _carImageDal.Get(carImage => carImage.Id == id);
+            if (carImage != null)
+            {
+
+                carImage.ImagePath = _fileHelper.Update(file, PathConstants.ImagesPath + carImage.ImagePath, PathConstants.ImagesPath);
+                _carImageDal.Update(carImage);
+                return new SuccessResult(Messages.CarImageUpdated);
+
+            }
+            else
+                return new ErrorResult(Messages.CarImageNotUpdated);
+            
         }       
 
         public IDataResult<List<CarImage>> GetAll()

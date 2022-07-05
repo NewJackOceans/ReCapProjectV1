@@ -7,6 +7,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Payments;
 
 namespace Business.Concrete
 {
@@ -26,16 +27,29 @@ namespace Business.Concrete
 
         }
 
-        public IResult Delete(Payment payment)
+        public IResult Delete(int id)
         {
-            _paymentDal.Delete(payment);
+            var payment = _paymentDal.Get(payment => payment.PaymentId == id);
+            if(payment != null)
+                _paymentDal.Delete(payment);
             return new SuccessResult("Payment deleted");
         }
 
-        public IResult Update(Payment payment)
+        public IResult Update(int id, UpdatePaymentRequest request)
         {
-            _paymentDal.Update(payment);
-            return new SuccessResult("payment updated");
+            var payment = _paymentDal.Get(payment => payment.PaymentId ==id);
+            if (payment != null)
+            {
+                payment.CreditCardNumber = request.CreditCardNumber;
+                payment.Price = request.Price;
+                payment.CustomerId = request.CustomerId;
+                payment.ExpirationDate = request.ExpirationDate;
+                payment.SecurityCode = request.SecurityCode;
+                _paymentDal.Update(payment);
+                return new SuccessResult(Messages.PaymentUpdated);
+            }
+            else
+                return new ErrorResult(Messages.PaymentNotUpdated);
         }
 
         public IDataResult<List<Payment>> GetAll()

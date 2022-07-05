@@ -13,6 +13,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using Entities.DTOs;
+using Entities.Requests.Cars;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -27,14 +28,17 @@ namespace Business.Concrete
     {
         ICarDal _carDal;
         IBrandService _brandService;
+        IColorService _colorService;
+        
 
-        public CarManager(ICarDal carDal, IBrandService brandService)
+        public CarManager(ICarDal carDal, IBrandService brandService, IColorService colorService)
         {
             _carDal = carDal;
             _brandService = brandService;
+            _colorService = colorService;
 
         }
-
+        [SecuredOperation("admin")]
         [CacheAspect]
         [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetAll()
@@ -54,31 +58,79 @@ namespace Business.Concrete
             return result;
         }
 
-        [PerformanceAspect(5)]
-        [SecuredOperation("car.add,admin")]
-        [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("ICarService.Get")]
-        public IResult Add(Car car)
+        //[PerformanceAspect(5)]
+        //[SecuredOperation("car.add,admin")]
+        //[ValidationAspect(typeof(CarValidator))]
+        //[CacheRemoveAspect("ICarService.Get")]
+        public IResult Add(CreateCarRequest request)
         {
 
-            ValidationTool.Validate(new CarValidator(), car);
+            //ValidationTool.Validate(new CarValidator(), car);
+            Car car = new Car();
+             
+            var brand = _brandService.GetById(request.BrandId);
+            if (brand.Success)
+                car.BrandId = request.BrandId;
+            else
+                return new ErrorResult(brand.Message);
+
+            var color = _colorService.GetById(request.ColorId);
+            if (color.Success)
+                car.ColorId = request.ColorId;
+            else
+                return new ErrorResult(color.Message);
+            
+
+            car.CarName = request.CarName;
+            car.DailyPrice = request.DailyPrice;
+            car.ModelYear = request.ModelYear;
+            car.Description = request.Description;
+
 
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
 
-        [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("ICarService.Get")]
-        public IResult Update(Car car)
+        //[ValidationAspect(typeof(CarValidator))]
+        //[CacheRemoveAspect("ICarService.Get")]
+        public IResult Update(int id, UpdateCarRequest request)
         {
-            _carDal.Update(car);
-            return new SuccessResult(Messages.CarUpdated);
+            var car = _carDal.Get(car => car.CarId == id);
+            if (car != null)
+            {
+                var brand = _brandService.GetById(id);
+                if(brand.Success)
+                    car.BrandId = request.BrandId;
+                else                
+                    return new ErrorResult(brand.Message);
+                
+
+                var color = _colorService.GetById(request.ColorId);
+                if (color != null)
+                    car.ColorId = request.ColorId;
+                else
+                    return new ErrorResult(Messages.NotFoundColor);
+
+
+                car.CarName = request.CarName;
+                car.ModelYear = request.ModelYear;
+                car.DailyPrice = request.DailyPrice;
+                car.Description = request.Description;
+                _carDal.Update(car);
+                return new SuccessResult(Messages.CarUpdated);
+            }
+            else
+                return new ErrorResult(Messages.CarNotUpdated);            
+            
         }
 
 
-        public IResult Delete(Car car)
+        public IResult Delete(int id)
         {
-            _carDal.Delete(car);
+            var car = _carDal.Get(car => car.CarId == id);
+            if(car != null)
+                _carDal.Delete(car);
+
             return new SuccessResult(Messages.CarDeleted);
         }
 
@@ -95,10 +147,11 @@ namespace Business.Concrete
 
         }
 
-        public IDataResult<List<Car>> Search(string modelYear, int carId, int colorId, int brandId, int pageIndex, int pageCount)
+        public IDataResult<List<Car>> Search(string carName, string modelYear, int carId, int colorId, int brandId, int pageIndex, int pageCount)
         {
             Expression<Func<Car, bool>> searchQuery = car =>
             (!string.IsNullOrWhiteSpace(modelYear) ? car.ModelYear.Contains(modelYear) : true) &&
+            (!string.IsNullOrWhiteSpace(carName) ? car.CarName.Contains(carName) : true) &&
             (carId > 0 ? car.CarId == carId : true) &&
             (brandId > 0 ? car.BrandId == brandId : true) &&
             (colorId > 0 ? car.ColorId == colorId : true);

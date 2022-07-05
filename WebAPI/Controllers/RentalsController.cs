@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Rentals;
 
 namespace WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebAPI.Controllers
             _rentalService = rentalService;
         }
 
-        [HttpGet("getall")]
+        [HttpGet]
         public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int customerId, [FromQuery] DateTime rentDate,[FromQuery] DateTime retunrDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             Thread.Sleep(1000);
@@ -34,7 +35,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getrentalsdetails")]
+        [HttpGet("details")]
         public IActionResult GetRentalsDetails()
         {
             var result = _rentalService.GetRentalsDetails();
@@ -45,7 +46,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public IActionResult Add(Rental rental)
         {
             var result = _rentalService.Add(rental);
@@ -56,10 +57,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("delete")]
-        public IActionResult Delete(Rental rental)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var result = _rentalService.Delete(rental);
+            var result = _rentalService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -67,10 +68,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(Rental rental)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateRentalRequest request)
         {
-            var result = _rentalService.Update(rental);
+            var result = _rentalService.Update(id, request);
             if (result.Success)
             {
                 return Ok(result);

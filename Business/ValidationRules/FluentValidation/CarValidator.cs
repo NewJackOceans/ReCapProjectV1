@@ -10,17 +10,9 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CarValidator()
         {
-            RuleFor(p => p.Description).MinimumLength(2);
-            RuleFor(p => p.Description).NotEmpty();
-            RuleFor(p => p.DailyPrice).NotEmpty();
-            RuleFor(p => p.DailyPrice).GreaterThan(0);
-            RuleFor(p => p.Description).Must(StartWithA).WithMessage("Car description must be start with A");
+            RuleFor(p => p.Description).MinimumLength(2).NotEmpty();
+            RuleFor(p => p.DailyPrice).NotEmpty().GreaterThan(0);
 
-        }
-
-        private bool StartWithA(string arg)
-        {
-            return arg.StartsWith("A");
         }
     }
 }

@@ -8,6 +8,7 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Entities.Concrete;
+using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 
@@ -41,15 +42,28 @@ namespace Business.Concrete
             return new SuccessResult(Messages.UserAdded);
         }
 
-        public IResult Update(User user)
+        public IResult Update(int id, UpdateUserRequest request)
         {
-            _userDal.Update(user);
-            return new SuccessResult(Messages.UserUpdated);
+            var user = _userDal.Get(user => user.Id == id);
+            if (user != null)
+            {
+                user.EMail = request.EMail;
+                user.FirstName = request.FirstName;
+                user.LastName = request.LastName;
+                user.Status = request.Status;
+                _userDal.Update(user);
+                return new SuccessResult(Messages.UserUpdated);
+            }
+            else
+                return new ErrorResult(Messages.UserNotUpdated);
+            
         }
 
-        public IResult Delete(User user)
+        public IResult Delete(int id)
         {
-            _userDal.Delete(user);
+            var user = _userDal.Get(user => user.Id == id);
+            if(user != null)
+                _userDal.Delete(user);
             return new SuccessResult(Messages.UserDeleted);
         }
         public User GetByMail(string email)

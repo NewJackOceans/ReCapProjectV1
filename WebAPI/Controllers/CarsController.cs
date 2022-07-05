@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Cars;
 
 namespace WebAPI.Controllers
 {
@@ -21,11 +22,11 @@ namespace WebAPI.Controllers
             _carService = carService;
         }
 
-        [HttpGet("getall")]
-        public IActionResult GetAll([FromQuery] int carId, [FromQuery] int colorId,[FromQuery] int brandId, [FromQuery] string modelYear = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
+        [HttpGet]
+        public IActionResult GetAll([FromQuery] int carId, [FromQuery] int colorId,[FromQuery] int brandId, [FromQuery] string modelYear = "", string carName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
 
-            var result = _carService.Search(modelYear, carId, colorId, brandId, pageIndex, pageCount);
+            var result = _carService.Search(carName, modelYear, carId, colorId, brandId, pageIndex, pageCount);
             if (result.Success)
             {
                 return Ok(result);
@@ -33,10 +34,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getcardetailsbycarid")]
-        public IActionResult GetCarDetailsByCarId(int carId)
+        [HttpGet("{id}")]
+        public IActionResult GetCarDetailsByCarId([FromRoute] int id)
         {
-            var result = _carService.GetCarDetailsByCarId(carId);
+            var result = _carService.GetCarDetailsByCarId(id);
 
             if (result.Success)
             {
@@ -45,7 +46,7 @@ namespace WebAPI.Controllers
             return BadRequest();
         }
 
-        [HttpGet("getcardetails")]
+        [HttpGet("details")]
         public IActionResult GetCarDetails()
         {
             var result = _carService.GetCarDetails();
@@ -57,10 +58,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("add")]
-        public IActionResult Add(Car car)
+        [HttpPost]
+        public IActionResult Add([FromBody] CreateCarRequest request)
         {
-            var result = _carService.Add(car);
+            var result = _carService.Add(request);
             if (result.Success)
             {
                 return Ok(result.Success);
@@ -68,10 +69,10 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("delete")]
-        public IActionResult Delete(Car car)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var result = _carService.Delete(car);
+            var result = _carService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -79,10 +80,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(Car car)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateCarRequest request)
         {
-            var result = _carService.Update(car);
+            var result = _carService.Update(id, request);
             if (result.Success)
             {
                 return Ok(result);

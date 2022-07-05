@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Colors;
 
 namespace WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebAPI.Controllers
             _colorService = colorService;
         }
 
-        [HttpGet("getall")]
+        [HttpGet]
         public IActionResult GetAll([FromQuery] int colorId, [FromQuery] string colorName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             var result = _colorService.Search(colorName, colorId, pageIndex, pageCount);
@@ -32,7 +33,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }      
 
-        [HttpPost("add")]
+        [HttpPost]
         public IActionResult Add(Color color)
         {
             var result = _colorService.Add(color);
@@ -43,10 +44,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("delete")]
-        public IActionResult Delete(Color color)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var result = _colorService.Delete(color);
+            var result = _colorService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -54,10 +55,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(Color color)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateColorRequest request)
         {
-            var result = _colorService.Update(color);
+            var result = _colorService.Update(id, request);
             if (result.Success)
             {
                 return Ok(result);

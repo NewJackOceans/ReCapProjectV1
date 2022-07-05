@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Requests.Customers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Business.Abstract
         IDataResult<List<Customer>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<Customer>> Search(string companyName, int customerId, int userId,  int pageIndex, int pageCount);
         IResult Add(Customer customer);
-        IResult Update(Customer customer);
-        IResult Delete(Customer customer);
+        IResult Update(int id, UpdateCustomerRequest request);
+        IResult Delete(int id);
     }
 }

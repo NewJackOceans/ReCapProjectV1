@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Requests.Cards;
 
 namespace WebAPI.Controllers
 {
@@ -19,7 +20,7 @@ namespace WebAPI.Controllers
         {
             _cardService = cardService;
         }
-        [HttpPost("add")]
+        [HttpPost]
         public IActionResult Add(Card card)
         {
             var result = _cardService.Add(card);
@@ -29,20 +30,20 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPost("delete")]
-        public IActionResult Delete(Card card)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var result = _cardService.Delete(card);
+            var result = _cardService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpPost("update")]
-        public IActionResult Update(Card card)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute]int id, [FromBody] UpdateCardRequest request)
         {
-            var result = _cardService.Update(card);
+            var result = _cardService.Update(id, request);
             if (result.Success)
             {
                 return Ok(result);
@@ -50,7 +51,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getAll")]
+        [HttpGet]
         public IActionResult GetAll([FromQuery] int cardId, [FromQuery] int customerId, [FromQuery] string ownerName="", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 20)
         {
             var result = _cardService.Search(ownerName, cardId, customerId, pageIndex, pageSize);
