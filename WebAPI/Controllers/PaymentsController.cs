@@ -21,9 +21,9 @@ namespace WebAPI.Controllers
             _paymentService = paymentService;
         }
         [HttpPost]
-        public IActionResult Add(Payment payment)
+        public IActionResult Add([FromBody] CreatePaymentRequest request)
         {
-            var result = _paymentService.Add(payment);
+            var result = _paymentService.Add(request);
             if (result.Success)
             {
                 return Ok(result);

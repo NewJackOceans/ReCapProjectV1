@@ -21,9 +21,9 @@ namespace WebAPI.Controllers
             _cardService = cardService;
         }
         [HttpPost]
-        public IActionResult Add(Card card)
+        public IActionResult Add([FromBody] CreateCardRequest request)
         {
-            var result = _cardService.Add(card);
+            var result = _cardService.Add(request);
             if (result.Success)
             {
                 return Ok(result);

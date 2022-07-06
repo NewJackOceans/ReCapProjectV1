@@ -9,7 +9,7 @@ namespace Business.Abstract
 {
     public interface IPaymentService
     {
-        IResult Add(Payment payment);
+        IResult Add(CreatePaymentRequest request);
         IResult Delete(int id);
         IResult Update(int id, UpdatePaymentRequest request);
 

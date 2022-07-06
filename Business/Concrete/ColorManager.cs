@@ -32,10 +32,18 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorsListed);
         }
 
-        [ValidationAspect(typeof(ColorValidator))]
-        public IResult Add(Color color)
+        //[ValidationAspect(typeof(ColorValidator))]
+        public IResult Add(CreateColorRequest request)
         {
-            ValidationTool.Validate(new ColorValidator(), color);
+            //ValidationTool.Validate(new ColorValidator(), color);
+            Color color = new Color();
+
+            var colorName = _colorDal.Get(color => color.ColorName == request.ColorName);
+            if (colorName != null)
+                return new ErrorResult(Messages.ColorNameIsAvailable);            
+            else
+                color.ColorName = request.ColorName;
+
             _colorDal.Add(color);
             return new SuccessResult(Messages.ColorAdded);
         }

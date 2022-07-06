@@ -16,7 +16,7 @@ namespace Business.Abstract
         IDataResult<List<RentalDetailDto>> GetRentalsDetails();
         IDataResult<List<Rental>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<Rental>> Search(int id, int carId, int customerId, DateTime rentDate, DateTime returnDate, int pageIndex, int pageCount);
-        IResult Add(Rental rental);
+        IResult Add(CreateRentalRequest request);
         IResult Update(int id, UpdateRentalRequest request);
         IResult Delete(int id);
         IResult IsCarAvaible(int carId);

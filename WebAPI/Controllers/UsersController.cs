@@ -35,9 +35,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(User user)
+        public IActionResult Add([FromBody] CreateUserRequest request)
         {
-            var result = _userService.Add(user);
+            var result = _userService.Add(request);
             if (result.Success)
             {
                 return Ok(result);

@@ -16,14 +16,28 @@ namespace Business.Concrete
     public class CardManager : ICardService
     {
         ICardDal _cardDal;
+        ICustomerService _customerService;
 
-        public CardManager(ICardDal cardDal)
+        public CardManager(ICardDal cardDal, ICustomerService customerService)
         {
             _cardDal = cardDal;
+            _customerService = customerService;
         }
 
-        public IResult Add(Card card)
+        public IResult Add(CreateCardRequest request)
         {
+            Card card = new Card();
+
+            var customer = _customerService.GetById(request.CustomerId);
+            if (customer.Success)
+                card.CustomerId = request.CustomerId;
+            else
+                return new ErrorResult(customer.Message);
+            card.CreditCardNumber = request.CreditCardNumber;
+            card.OwnerName = request.OwnerName;
+            card.ExpirationDate = request.ExpirationDate;
+            card.SecurityCode = request.SecurityCode;
+
             _cardDal.Add(card);
             return new SuccessResult("Card Added");
         }

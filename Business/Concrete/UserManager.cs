@@ -17,10 +17,14 @@ namespace Business.Concrete
     public class UserManager : IUserService
     {
         private IUserDal _userDal;
+        private IUserService _userService;
+        IAuthService _authService;
 
-        public UserManager(IUserDal userDal)
+        public UserManager(IUserDal userDal, IUserService userService, IAuthService authService)
         {
             _userDal = userDal;
+            _userService = userService;
+            _authService = authService;
         }
 
         public List<OperationClaim> GetClaims(User user)
@@ -33,10 +37,22 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UsersListed);
         }
 
-        [ValidationAspect(typeof(UserValidator))]
-        public IResult Add(User user)
+        //[ValidationAspect(typeof(UserValidator))]
+        public IResult Add(CreateUserRequest request)
         {
-            ValidationTool.Validate(new UserValidator(), user);
+            //ValidationTool.Validate(new UserValidator(), user);
+            User user = new User();
+
+            var email = _authService.UserExists(request.EMail);
+            if (email.Success)
+                user.EMail = request.EMail;
+            else
+                return new ErrorResult(Messages.UserAlreadyExists);
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+
+
 
             _userDal.Add(user);
             return new SuccessResult(Messages.UserAdded);
@@ -85,6 +101,16 @@ namespace Business.Concrete
             (id > 0 ? user.Id == id : true) &&
             (status != null ? user.Status == status : true) ;
             return new SuccessDataResult<List<User>>(_userDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.UserPaging);
+        }
+
+        public IDataResult<User> GetById(int id)
+        {
+            var user = _userDal.Get(user => user.Id == id);
+            if (user != null)
+            {
+                return new ErrorDataResult<User>(Messages.UserIsAvailable);
+            }
+            return new SuccessDataResult<User>(user);
         }
     }
 }

@@ -27,6 +27,9 @@ namespace Business.Constants
         public static string BrandsListed = "Brands listed!";
         public static string BrandPaging = "Brand Paging";
         public static string NotFoundBrand = "Not Find Brand.";
+        public static string BrandIdNotAvailable = "Brand Is Not Available.";
+        public static string BrandIdIsAvailable = "BrandId Is Available.";
+        public static string BrandNameIsAvailable = "Brand Name is Available.";
 
 
         public static string ColorAdded = "Color successfully added";
@@ -36,6 +39,7 @@ namespace Business.Constants
         public static string ColorNotUpdated = "Color Not Updated";
         public static string ColorPaging = "Color Paging.";
         public static string NotFoundColor = "Not Found Color.";
+        public static string ColorNameIsAvailable = "Color Name is Available.";
 
 
         public static string UserAdded = "User successfully added";
@@ -61,6 +65,8 @@ namespace Business.Constants
         public static string CustomersListed = "Customers listed";
         public static string CustomerNotUpdated = "Customer not updated.";
         public static string CustomerPaging = "Customer Paging.";
+        public static string NotFoundCustomer = "Customer Not Found";
+        public static string CompanyNameIsAvailable = "Company Name is Available.";
 
         public static string CarRented = "The car has not been received yet.Please check for another car.";
 
@@ -77,14 +83,15 @@ namespace Business.Constants
         public static string PasswordError = "Password error";
         public static string SuccessfulLogin = "Successful login";
         public static string UserAlreadyExists = "User already exists";
-        public static string AccessTokenCreated = "Access token created";        
+        public static string AccessTokenCreated = "Access token created";
+        public static string UserIsAvailable = "User is Available.";
 
         public static string CardUpdated = "Card Updated.";
         public static string CardNotUpdated = "Card Not Updated.";
         public static string CardPaging = "Card Paging.";
 
-        public static string BrandIdNotAvailable = "Brand Is Not Available.";
+        public static string CarNotFound = "Car Not Found";
 
-        public static string BrandIdIsAvailable = "BrandId Is Available.";
+        public static string RentDateCannotBeGreaterThanReturnDate = "RentDate can not be greater than ReturrnDate";
     }
 }

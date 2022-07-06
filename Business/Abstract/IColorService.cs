@@ -16,7 +16,7 @@ namespace Business.Abstract
         IDataResult<Color> GetById(int id);
         IDataResult<List<Color>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<Color>> Search(string colorName, int colorId, int pageIndex, int pageCount);
-        IResult Add(Color color);
+        IResult Add(CreateColorRequest request);
         IResult Update(int id, UpdateColorRequest request);
         IResult Delete(int id);
     }

@@ -36,9 +36,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Customer customer)
+        public IActionResult Add([FromBody] CreateCustomerRequest resquest)
         {
-            var result = _costumerService.Add(customer);
+            var result = _costumerService.Add(resquest);
             if (result.Success)
             {
                 return Ok(result);

@@ -47,9 +47,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Rental rental)
+        public IActionResult Add([FromBody] CreateRentalRequest request)
         {
-            var result = _rentalService.Add(rental);
+            var result = _rentalService.Add(request);
             if (result.Success)
             {
                 return Ok(result);

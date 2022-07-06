@@ -39,9 +39,8 @@ namespace Core.DataAccess.EntityFramework
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
             using (TContext context = new TContext())
-            {
-                return context.Set<TEntity>().SingleOrDefault(filter);
-
+            {                
+                return context.Set<TEntity>().SingleOrDefault(filter);                
             }
         }
 

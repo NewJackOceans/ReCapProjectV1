@@ -34,9 +34,9 @@ namespace WebAPI.Controllers
         }      
 
         [HttpPost]
-        public IActionResult Add(Color color)
+        public IActionResult Add([FromBody] CreateColorRequest request)
         {
-            var result = _colorService.Add(color);
+            var result = _colorService.Add(request);
             if (result.Success)
             {
                 return Ok(result);

@@ -15,10 +15,11 @@ namespace Business.Abstract
         IDataResult<List<Brand>> GetAll();
         IDataResult<List<Brand>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageCount);
-        IResult Add(Brand brand);
+        IResult Add(CreateBrandRequest request);
         IResult Update(int id, UpdateBrandRequest request);
         IResult Delete(int id);
         IDataResult<Brand> GetById(int id);
+        IDataResult<Brand> GetByName(string name);
         IResult CheckBrandId(int id);
     }
 }

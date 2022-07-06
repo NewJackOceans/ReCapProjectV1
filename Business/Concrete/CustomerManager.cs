@@ -21,10 +21,13 @@ namespace Business.Concrete
     public class CustomerManager : ICustomerService
     {
         private ICustomerDal _costumerDal;
+        IUserService _userService;
+        
 
-        public CustomerManager(ICustomerDal costumerDal)
+        public CustomerManager(ICustomerDal costumerDal, IUserService userService)
         {
             _costumerDal = costumerDal;
+            _userService = userService;
         }
 
         public IDataResult<List<Customer>> GetAll()
@@ -32,10 +35,26 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_costumerDal.GetAll(), Messages.CustomersListed);
         }
 
-        [ValidationAspect(typeof(CustomerValidator))]
-        public IResult Add(Customer customer)
+        //[ValidationAspect(typeof(CustomerValidator))]
+        public IResult Add(CreateCustomerRequest request)
         {
-            ValidationTool.Validate(new CustomerValidator(), customer);
+            //ValidationTool.Validate(new CustomerValidator(), customer);
+
+            Customer customer = new Customer();
+
+            var user = _costumerDal.Get(userId => userId.UserId == request.UserId);
+            if (user != null)
+                return new ErrorResult(Messages.UserIsAvailable);
+            else
+                customer.UserId = request.UserId;
+                
+
+            var companyName = _costumerDal.Get(company => company.CompanyName == request.CompanyName);
+            if (companyName != null)
+                return new ErrorResult(Messages.CompanyNameIsAvailable);
+            else
+                customer.CompanyName = request.CompanyName;
+            
 
             _costumerDal.Add(customer);
             return new SuccessResult(Messages.CustomerAdded);
@@ -75,6 +94,16 @@ namespace Business.Concrete
             (customerId > 0 ? customer.CustomerId == customerId : true) &&
             (userId > 0 ? customer.UserId == userId : true);
             return new SuccessDataResult<List<Customer>>(_costumerDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CustomerPaging);
+        }
+
+        public IDataResult<Customer> GetById(int id)
+        {
+            var customer = _costumerDal.Get(customer => customer.CustomerId == id);
+            if (customer == null)
+            {
+                return new ErrorDataResult<Customer>(Messages.NotFoundCustomer);
+            }
+            return new SuccessDataResult<Customer>(customer);
         }
     }
 }

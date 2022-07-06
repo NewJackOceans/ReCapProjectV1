@@ -16,6 +16,7 @@ namespace Business.Abstract
         IResult Update(int id, UpdateCarRequest request);
         IResult Delete(int id);
         IDataResult<List<Car>> GetAll();
+        IDataResult<Car> GetById(int id);
         IDataResult<List<CarDetailDto>> GetCarDetails();
         IDataResult<List<CarDetailDto>> GetCarDetailsByCarId(int carId);
         IResult AddTransactionalTest(Car car);

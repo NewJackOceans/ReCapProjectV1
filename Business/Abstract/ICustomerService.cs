@@ -12,9 +12,10 @@ namespace Business.Abstract
     public interface ICustomerService
     {
         IDataResult<List<Customer>> GetAll();
+        IDataResult<Customer> GetById(int id);
         IDataResult<List<Customer>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<Customer>> Search(string companyName, int customerId, int userId,  int pageIndex, int pageCount);
-        IResult Add(Customer customer);
+        IResult Add(CreateCustomerRequest request);
         IResult Update(int id, UpdateCustomerRequest request);
         IResult Delete(int id);
     }

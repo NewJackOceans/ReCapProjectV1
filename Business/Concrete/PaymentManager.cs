@@ -14,14 +14,32 @@ namespace Business.Concrete
     public class PaymentManager : IPaymentService
     {
         IPaymentDal _paymentDal;
+        ICustomerService _customerService;
 
-        public PaymentManager(IPaymentDal paymentDal)
+        public PaymentManager(IPaymentDal paymentDal, ICustomerService customerService)
         {
             _paymentDal = paymentDal;
+            _customerService = customerService;            
         }
 
-        public IResult Add(Payment payment)
+        public IResult Add(CreatePaymentRequest request)
         {
+            Payment payment = new Payment();
+
+            var customerId = _customerService.GetById(request.CustomerId);
+            if (customerId.Success)
+                payment.CustomerId = request.CustomerId;
+            else
+                return new ErrorResult(Messages.NotFoundCustomer);
+            
+
+
+            payment.CreditCardNumber = request.CreditCardNumber;
+            payment.Price = request.Price;
+            payment.ExpirationDate = request.ExpirationDate;
+            payment.SecurityCode = request.SecurityCode;
+
+
             _paymentDal.Add(payment);
             return new SuccessResult("Payment added");
 

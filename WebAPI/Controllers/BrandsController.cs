@@ -38,9 +38,9 @@ namespace WebAPI.Controllers
 
 
         [HttpPost]
-        public IActionResult Add(Brand brand)
+        public IActionResult Add([FromBody] CreateBrandRequest request)
         {
-            var result = _brandService.Add(brand);
+            var result = _brandService.Add(request);
             if (result.Success)
             {
                 return Ok(result);

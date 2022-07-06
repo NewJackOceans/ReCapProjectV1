@@ -9,7 +9,7 @@ namespace Business.Abstract
 {
     public interface ICardService
     {
-        IResult Add(Card card);
+        IResult Add(CreateCardRequest request);
         IResult Delete(int id);
         IResult Update(int id, UpdateCardRequest request);
 

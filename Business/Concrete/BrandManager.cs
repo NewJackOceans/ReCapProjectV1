@@ -40,12 +40,23 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandsListed);
         }
 
-        [ValidationAspect(typeof(BrandValidator))]
-        public IResult Add(Brand brand)
+        //[ValidationAspect(typeof(BrandValidator))]
+        public IResult Add(CreateBrandRequest request)
         {
-            ValidationTool.Validate(new BrandValidator(), brand);
+            //ValidationTool.Validate(new BrandValidator(), brand);
+
+            Brand brand = new Brand();
+            
+            var brandName = _brandDal.Get(brand => brand.BrandName == request.BrandName);
+            if (brandName == null)
+                brand.BrandName = request.BrandName;
+            else
+                return new ErrorResult(Messages.BrandNameIsAvailable);
+
             _brandDal.Add(brand);
             return new SuccessResult(Messages.BrandAdded);
+
+
         }
 
         public IResult Update(int id, UpdateBrandRequest request)
@@ -93,6 +104,16 @@ namespace Business.Concrete
             if (brand == null)
             {
                 return new ErrorDataResult<Brand>(Messages.NotFoundBrand);
+            }
+            return new SuccessDataResult<Brand>(brand);
+        }
+
+        public IDataResult<Brand> GetByName(string name)
+        {
+            var brand = _brandDal.Get(brand => brand.BrandName == name);
+            if (brand != null)
+            {
+                return new ErrorDataResult<Brand>(Messages.BrandNameIsAvailable);
             }
             return new SuccessDataResult<Brand>(brand);
         }

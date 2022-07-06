@@ -14,11 +14,13 @@ namespace Business.Abstract
     {
         List<OperationClaim> GetClaims(User user);
         IDataResult<List<User>> GetAll();
+        IDataResult<User> GetById(int id);
         IDataResult<List<User>> GetForPageable(int pageIndex, int pageCount);
         IDataResult<List<User>> Search(int id, bool status,string firstName, string lastName, string email, int pageIndex, int pageCount);
-        IResult Add(User user);
+        IResult Add(CreateUserRequest request);
         IResult Update(int id, UpdateUserRequest request);
         IResult Delete(int id);
         User GetByMail(string email);
+
     }
 }

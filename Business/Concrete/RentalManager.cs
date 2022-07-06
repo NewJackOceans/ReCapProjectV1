@@ -20,13 +20,17 @@ namespace Business.Concrete
     {
         private IRentalDal _rentalDal;
         ICarDal _carDal;
+        ICarService _carService;
+        ICustomerService _customerService;
 
         private IRentalService _rentalServiceImplementation;
 
-        public RentalManager(IRentalDal rentalDal, ICarDal carDal)
+        public RentalManager(IRentalDal rentalDal, ICarDal carDal, ICarService carService, ICustomerService customerService)
         {
             _rentalDal = rentalDal;
             _carDal = carDal;
+            _carService = carService;
+            _customerService = customerService;
 
         }
 
@@ -40,12 +44,32 @@ namespace Business.Concrete
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalsDetails());
         }
 
-        [ValidationAspect(typeof(RentalValidator))]
-        public IResult Add(Rental rental)
+        //[ValidationAspect(typeof(RentalValidator))]
+        public IResult Add(CreateRentalRequest request)
         {
-            ValidationTool.Validate(new RentalValidator(), rental);
+            //ValidationTool.Validate(new RentalValidator(), rental);
 
-            _rentalDal.Add(rental);
+            Rental rental = new Rental();
+
+            var car = _carService.GetById(request.CarId);
+            if (car.Success)
+                rental.CarId = request.CarId;
+            else
+                return new ErrorResult(Messages.CarNotFound);
+
+            var customerId = _customerService.GetById(request.CustomerId);
+            if (customerId.Success)
+                rental.CustomerId = request.CustomerId;
+            else
+                return new ErrorResult(Messages.NotFoundCustomer);
+            rental.RentDate = request.RentDate;
+            if (request.RentDate > request.ReturnDate)
+                return new ErrorResult(Messages.RentDateCannotBeGreaterThanReturnDate);
+            else
+                rental.RentDate = request.RentDate;
+            rental.ReturnDate = request.ReturnDate;
+
+                _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalAdded);
         }
 

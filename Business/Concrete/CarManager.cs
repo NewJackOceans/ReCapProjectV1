@@ -158,6 +158,13 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CarPaging);
         }
 
-        
+        public IDataResult<Car> GetById(int id)
+        {
+            var car = _carDal.Get(car => car.CarId == id);
+            if (car == null)
+                return new ErrorDataResult<Car>(Messages.CarNotFound);
+            else
+                return new SuccessDataResult<Car>(car);
+        }
     }
 }
