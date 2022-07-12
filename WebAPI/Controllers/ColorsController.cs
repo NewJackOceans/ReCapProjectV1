@@ -19,11 +19,8 @@ namespace WebAPI.Controllers
         public IActionResult GetAll([FromQuery] int colorId, [FromQuery] string colorName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             var result = _colorService.Search(colorName, colorId, pageIndex, pageCount);
-            if (result.Success)
-            {
+            
                 return Ok(result);
-            }
-            return BadRequest(result);
         }      
 
         [HttpPost]

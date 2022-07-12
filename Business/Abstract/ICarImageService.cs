@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Entities;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 
@@ -12,7 +13,7 @@ namespace Business.Abstract
         IDataResult<List<CarImage>> GetAll();
         IDataResult<List<CarImage>> GetByImageId(int id); // Fotoğraf silerken kullanıyorum.
         IDataResult<List<CarImage>> GetForPageable(int pageIndex, int pageCount);
-        IDataResult<List<CarImage>> Search(int id, int carId, int pageIndex, int pageCount);
+        Pageable<CarImage> Search(int id, int carId, int pageIndex, int pageCount);
 
     }
 }

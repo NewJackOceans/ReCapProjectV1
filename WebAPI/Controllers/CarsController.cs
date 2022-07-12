@@ -20,11 +20,8 @@ namespace WebAPI.Controllers
         {
 
             var result = _carService.Search(carName, modelYear, carId, colorId, brandId, pageIndex, pageCount);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

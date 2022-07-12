@@ -49,11 +49,8 @@ namespace WebAPI.Controllers
         public IActionResult GetAll([FromQuery] int cardId, [FromQuery] int customerId, [FromQuery] string ownerName="", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 20)
         {
             var result = _cardService.Search(ownerName, cardId, customerId, pageIndex, pageSize);
-            if (result.Success)
-            {
+            
                 return Ok(result);
-            }
-            return BadRequest(result);
         }
 
         

@@ -48,11 +48,8 @@ namespace WebAPI.Controllers
         public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             var result = _carImageService.Search(id, carId, pageIndex, pageCount);
-            if (result.Success)
-            {
+            
                 return Ok(result);
-            }
-            return BadRequest(result);
         }
         
     }

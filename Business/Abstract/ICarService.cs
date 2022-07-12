@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Entities;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.DTOs;
 using Entities.Requests.Cars;
@@ -16,7 +17,7 @@ namespace Business.Abstract
         IDataResult<List<CarDetailDto>> GetCarDetailsByCarId(int carId);
         IResult AddTransactionalTest(Car car);
         IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount);
-        IDataResult<List<Car>> Search(string carName, string modelYear, int carId, int colorId, int brandId, int pageIndex, int pageCount);
+        Pageable<Car> Search(string carName, string modelYear, int carId, int colorId, int brandId, int pageIndex, int pageCount);
 
     }
 }

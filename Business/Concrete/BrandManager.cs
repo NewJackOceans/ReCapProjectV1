@@ -5,8 +5,7 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System.Linq.Expressions;
 using Entities.Requests.Brands;
-
-
+using Core.Entities;
 
 namespace Business.Concrete
 {
@@ -21,10 +20,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Brand>> GetAll()
         {
-            if (DateTime.Now.Hour == 23)
-            {
-                return new ErrorDataResult<List<Brand>>(Messages.MaintenanceTime);
-            }
+            
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandsListed);
         }
 
@@ -76,12 +72,17 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(null, pageIndex, pageCount), Messages.BrandPaging);
         }
 
-        public IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageCount)
+        public Pageable<Brand> Search(string brandName, int brandId, int pageIndex, int pageCount)
         {
             Expression<Func<Brand, bool>> searchQuery = brand =>
             (!string.IsNullOrWhiteSpace(brandName) ? brand.BrandName.Contains(brandName) : true) &&
             (brandId > 0 ? brand.BrandId == brandId : true);
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.BrandPaging);
+
+            var brands = _brandDal.GetForPageable(searchQuery, pageIndex, pageCount);
+            var count = _brandDal.GetCount(searchQuery);
+            var data = new Pageable<Brand>(pageIndex, pageCount, count, brands);
+
+            return data;
         }
 
         

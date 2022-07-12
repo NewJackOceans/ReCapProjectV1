@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Entities;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.Requests.Payments;
 
@@ -12,6 +13,6 @@ namespace Business.Abstract
 
         IDataResult<List<Payment>> GetAll();
         IDataResult<List<Payment>> GetForPageable(int pageIndex, int pageCount);
-        IDataResult<List<Payment>> Search(int paymentId, int customerId, int pageIndex, int pageCount);
+        Pageable<Payment> Search(int paymentId, int customerId, int pageIndex, int pageCount);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Entities;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.Requests.Cards;
 
@@ -12,6 +13,6 @@ namespace Business.Abstract
 
         IDataResult<List<Card>> GetAll();
         IDataResult<List<Card>> GetForPageable(int pageIndex, int pageCount);
-        IDataResult<List<Card>> Search(string ownerName, int cardId, int customerId, int pageIndex, int pageCount);
+        Pageable<Card> Search(string ownerName, int cardId, int customerId, int pageIndex, int pageCount);
     }
 }

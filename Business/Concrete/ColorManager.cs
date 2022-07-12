@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -66,12 +67,18 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Color>>(_colorDal.GetForPageable(null, pageIndex, pageCount), Messages.ColorPaging);
         }
 
-        public IDataResult<List<Color>> Search(string colorName, int colorId, int pageIndex, int pageCount)
+        public Pageable<Color> Search(string colorName, int colorId, int pageIndex, int pageCount)
         {
             Expression<Func<Color, bool>> searchQuery = color =>
             (!string.IsNullOrWhiteSpace(colorName) ? color.ColorName.Contains(colorName) : true) &&
             (colorId > 0 ? color.ColorId == colorId : true);
-            return new SuccessDataResult<List<Color>>(_colorDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.ColorPaging);
+            
+            var colors = _colorDal.GetForPageable(searchQuery, pageIndex, pageCount);
+            var count = _colorDal.GetCount(searchQuery);
+            var data = new Pageable<Color>(pageIndex, pageCount, count, colors);
+
+            return data;
+
         }
 
         public IDataResult<Color> GetById(int id)

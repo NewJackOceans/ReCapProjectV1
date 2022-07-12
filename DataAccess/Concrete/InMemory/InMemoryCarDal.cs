@@ -82,6 +82,11 @@ namespace DataAccess.Concrete.InMemory
             throw new NotImplementedException();
         }
 
+        public int GetCount(Expression<Func<Car, bool>> filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Car> GetForPageable(Expression<Func<Car, bool>> filter = null, int pageIndex = 0, int pageCount = 20)
         {
             throw new NotImplementedException();

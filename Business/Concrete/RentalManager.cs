@@ -120,7 +120,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetForPageable(null, pageIndex, pageCount), Messages.RentalPaging);
         }
 
-        public IDataResult<List<Rental>> Search(int id, int carId, int customerId, DateTime rentDate, DateTime returnDate, int pageIndex, int pageCount)
+        public Core.Entities.Pageable<Rental> Search(int id, int carId, int customerId, DateTime rentDate, DateTime returnDate, int pageIndex, int pageCount)
         {
             Expression<Func<Rental, bool>> searchQuery = rental =>
             (rentDate == null ? rental.RentDate == rentDate : true) &&
@@ -128,7 +128,14 @@ namespace Business.Concrete
             (id > 0 ? rental.Id == id : true) &&
             (carId > 0 ? rental.CarId == carId : true) &&
             (customerId > 0 ? rental.CustomerId == customerId : true);
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.RentalPaging);
+
+            var rentals = _rentalDal.GetForPageable(searchQuery, pageIndex, pageCount);
+            var count = _rentalDal.GetCount(searchQuery);
+            var data = new Pageable<Rental>(pageIndex, pageCount, count, rentals);
+
+            return data;
+
+
         }
     }
 }

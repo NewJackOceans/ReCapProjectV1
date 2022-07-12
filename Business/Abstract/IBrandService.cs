@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Entities;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.Requests.Brands;
 
@@ -8,7 +9,7 @@ namespace Business.Abstract
     {
         IDataResult<List<Brand>> GetAll();
         IDataResult<List<Brand>> GetForPageable(int pageIndex, int pageCount);
-        IDataResult<List<Brand>> Search(string brandName, int brandId, int pageIndex, int pageCount);
+        Pageable<Brand> Search(string brandName, int brandId, int pageIndex, int pageCount);
         IResult Add(CreateBrandRequest request);
         IResult Update(int id, UpdateBrandRequest request);
         IResult Delete(int id);

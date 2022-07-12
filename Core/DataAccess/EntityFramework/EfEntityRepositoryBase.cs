@@ -27,9 +27,11 @@ namespace Core.DataAccess.EntityFramework
                 context.SaveChanges();
             }
         }
+        
 
-        
-        
+
+
+
 
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
@@ -55,6 +57,15 @@ namespace Core.DataAccess.EntityFramework
                 return filter == null
                     ? context.Set<TEntity>().Skip(pageIndex*pageCount).Take(pageCount).ToList()
                     : context.Set<TEntity>().Where(filter).Skip(pageIndex * pageCount).Take(pageCount).ToList();
+            }
+        }
+        public int GetCount(Expression<Func<TEntity, bool>> filter = null)
+        {
+            using (TContext context = new TContext())
+            {
+                return filter == null
+                    ? context.Set<TEntity>().Count()
+                    : context.Set<TEntity>().Where(filter).Count();
             }
         }
 

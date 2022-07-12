@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -77,13 +78,18 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_costumerDal.GetForPageable(null, pageIndex, pageCount), Messages.CustomerPaging);
         }
 
-        public IDataResult<List<Customer>> Search(string companyName, int customerId, int userId, int pageIndex, int pageCount)
+        public Pageable<Customer> Search(string companyName, int customerId, int userId, int pageIndex, int pageCount)
         {
             Expression<Func<Customer, bool>> searchQuery = customer =>
             (!string.IsNullOrWhiteSpace(companyName) ? customer.CompanyName.Contains(companyName) : true) &&
             (customerId > 0 ? customer.CustomerId == customerId : true) &&
             (userId > 0 ? customer.UserId == userId : true);
-            return new SuccessDataResult<List<Customer>>(_costumerDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CustomerPaging);
+
+            var customers = _costumerDal.GetForPageable(searchQuery, pageIndex, pageCount);
+            var count = _costumerDal.GetCount(searchQuery);
+            var data = new Pageable<Customer>(pageIndex, pageCount, count, customers);
+
+            return data;
         }
 
         public IDataResult<Customer> GetById(int id)

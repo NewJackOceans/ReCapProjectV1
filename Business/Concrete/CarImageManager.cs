@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Entities;
 using Core.Utilities.Business;
 using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Results;
@@ -93,12 +94,17 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetForPageable(null, pageIndex, pageCount), Messages.CarImagePaging);
         }
 
-        public IDataResult<List<CarImage>> Search(int id, int carId, int pageIndex, int pageCount)
+        public Pageable<CarImage> Search(int id, int carId, int pageIndex, int pageCount)
         {
             Expression<Func<CarImage, bool>> searchQuery = carImage =>
             (id > 0 ? carImage.Id == id : true) &&
             (carId > 0 ? carImage.CarId == carId : true);
-            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.CarImagePaging);
+
+            var carImages = _carImageDal.GetForPageable(searchQuery, pageIndex, pageCount);
+            var count = _carImageDal.GetCount(searchQuery);
+            var data = new Pageable<CarImage>(pageIndex, pageCount, count, carImages);
+
+            return data;
 
         }
 

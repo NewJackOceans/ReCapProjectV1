@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Business.Abstract;
 using Business.Constants;
+using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -77,12 +78,17 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Payment>>(_paymentDal.GetForPageable(null, pageIndex, pageCount), Messages.PaymentPaging);
         }
 
-        public IDataResult<List<Payment>> Search(int paymentId, int customerId, int pageIndex, int pageCount)
+        public Pageable<Payment> Search(int paymentId, int customerId, int pageIndex, int pageCount)
         {
             Expression<Func<Payment, bool>> searchQuery = payment =>
             (paymentId > 0 ? payment.PaymentId == paymentId : true) &&
             (customerId > 0 ? payment.CustomerId == customerId : true);
-            return new SuccessDataResult<List<Payment>>(_paymentDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.PaymentPaging);
+
+            var payments = _paymentDal.GetForPageable(searchQuery, pageIndex, pageCount);
+            var count = _paymentDal.GetCount(searchQuery);
+            var data = new Pageable<Payment>(pageIndex, pageCount, count, payments);
+
+            return data;
         }
     }
 }

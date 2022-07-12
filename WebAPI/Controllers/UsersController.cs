@@ -21,11 +21,8 @@ namespace WebAPI.Controllers
         {
 
             var result = _userService.Search(id, status, firstName, lastName, email, pageIndex, pageCount);
-            if (result.Success)
-            {
+            
                 return Ok(result);
-            }
-            return BadRequest(result);
         }
 
         [HttpPost]

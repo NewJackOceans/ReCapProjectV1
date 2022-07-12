@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Business.Abstract;
 using Business.Constants;
+using Core.Entities;
 using Core.Entities.Concrete;
 using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
@@ -86,7 +87,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(_userDal.GetForPageable(null, pageIndex, pageCount), Messages.UserPaging);
         }
 
-        public IDataResult<List<User>> Search(int id, bool status, string firstName, string lastName, string email, int pageIndex, int pageCount)
+        public Pageable<User> Search(int id, bool status, string firstName, string lastName, string email, int pageIndex, int pageCount)
         {
             Expression<Func<User, bool>> searchQuery = user =>
             (!string.IsNullOrWhiteSpace(firstName) ? user.FirstName.Contains(firstName) : true) &&
@@ -94,7 +95,14 @@ namespace Business.Concrete
             (!string.IsNullOrWhiteSpace(email) ? user.EMail.Contains(email) : true) &&
             (id > 0 ? user.Id == id : true) &&
             (status != null ? user.Status == status : true) ;
-            return new SuccessDataResult<List<User>>(_userDal.GetForPageable(searchQuery, pageIndex, pageCount), Messages.UserPaging);
+
+            var users = _userDal.GetForPageable(searchQuery, pageIndex, pageCount);
+            var count = _userDal.GetCount(searchQuery);
+            var data = new Pageable<User>(pageIndex, pageCount, count, users);
+
+            return data;
+
+
         }
 
         public IDataResult<User> GetById(int id)
