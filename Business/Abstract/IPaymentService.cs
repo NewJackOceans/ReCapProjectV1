@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Core.Utilities.Results;
+﻿using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.Requests.Payments;
 

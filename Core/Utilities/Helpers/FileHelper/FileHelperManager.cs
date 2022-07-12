@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Utilities.Helpers.FileHelper;
+﻿
 using Core.Utilities.Helpers.GuidHelperr;
 using Microsoft.AspNetCore.Http;
 

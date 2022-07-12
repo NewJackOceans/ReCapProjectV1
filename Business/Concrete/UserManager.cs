@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Linq.Expressions;
 using Business.Abstract;
 using Business.Constants;
-using Business.ValidationRules.FluentValidation;
-using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Validation;
 using Core.Entities.Concrete;
 using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
@@ -111,6 +105,11 @@ namespace Business.Concrete
                 return new ErrorDataResult<User>(Messages.UserIsAvailable);
             }
             return new SuccessDataResult<User>(user);
+        }
+
+        public void Add(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

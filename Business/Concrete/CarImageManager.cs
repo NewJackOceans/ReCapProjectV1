@@ -5,14 +5,8 @@ using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using Entities.Requests.CarImages;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {

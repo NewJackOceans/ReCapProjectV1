@@ -1,7 +1,4 @@
-﻿using Core.Utilities.Results;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using Microsoft.AspNetCore.Http;
 
 namespace Core.Utilities.Helpers.FileHelper

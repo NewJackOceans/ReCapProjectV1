@@ -1,13 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
-using Core.Entities.Concrete;
 using Core.Entities.Requests.Users;
+using Core.Utilities.Results;
 
 namespace WebAPI.Controllers
 {
@@ -37,7 +31,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] CreateUserRequest request)
         {
-            var result = _userService.Add(request);
+            IResult result = _userService.Add(request);
             if (result.Success)
             {
                 return Ok(result);

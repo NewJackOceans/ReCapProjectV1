@@ -1,26 +1,15 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
-using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Transaction;
-using Core.Aspects.Autofac.Validation;
 using Core.Aspects.Performance;
-using Core.CrossCuttingConcerns.Validation;
-using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
-using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using Entities.DTOs;
 using Entities.Requests.Cars;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -66,21 +55,17 @@ namespace Business.Concrete
         {
 
             //ValidationTool.Validate(new CarValidator(), car);
-            Car car = new Car();
-             
+            Car car = new Car();             
             var brand = _brandService.GetById(request.BrandId);
-            if (brand.Success)
-                car.BrandId = request.BrandId;
-            else
-                return new ErrorResult(brand.Message);
+            if (!brand.Success)
+                return new ErrorResult(brand.Message);                
 
             var color = _colorService.GetById(request.ColorId);
-            if (color.Success)
-                car.ColorId = request.ColorId;
-            else
+            if (!color.Success)
                 return new ErrorResult(color.Message);
-            
 
+            car.ColorId = request.ColorId;
+            car.BrandId = request.BrandId;
             car.CarName = request.CarName;
             car.DailyPrice = request.DailyPrice;
             car.ModelYear = request.ModelYear;

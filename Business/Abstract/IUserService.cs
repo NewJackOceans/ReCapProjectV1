@@ -1,12 +1,6 @@
 ﻿using Core.Entities.Concrete;
 using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
-using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
@@ -21,6 +15,6 @@ namespace Business.Abstract
         IResult Update(int id, UpdateUserRequest request);
         IResult Delete(int id);
         User GetByMail(string email);
-
+        void Add(User user);
     }
 }
