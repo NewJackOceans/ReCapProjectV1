@@ -47,6 +47,8 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<PaymentManager>().As<IPaymentService>().SingleInstance();
             builder.RegisterType<EfPaymentDal>().As<IPaymentDal>().SingleInstance();
 
+            builder.RegisterType<CarServiceManager>().As<ICarServiceService>().SingleInstance();
+            builder.RegisterType<EfCarServiceDal>().As<ICarServiceDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

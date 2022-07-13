@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Business.Abstract;
 using Business.Constants;
+using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;

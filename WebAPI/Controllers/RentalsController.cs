@@ -18,11 +18,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int customerId, [FromQuery] DateTime rentDate,[FromQuery] DateTime retunrDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
+        public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int customerId, [FromQuery] DateTime rentDate,[FromQuery] DateTime returnDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             
 
-            var result = _rentalService.Search(id, carId, customerId, rentDate, retunrDate, pageIndex, pageCount);
+            var result = _rentalService.Search(id, carId, customerId, rentDate, returnDate, pageIndex, pageCount);
             
                 return Ok(result);
         }

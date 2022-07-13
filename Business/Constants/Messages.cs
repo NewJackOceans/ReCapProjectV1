@@ -1,4 +1,6 @@
-﻿namespace Business.Constants
+﻿using Entities.Concrete;
+
+namespace Business.Constants
 {
     public static class Messages
     {
@@ -86,5 +88,15 @@
         public static string CarNotFound = "Car Not Found";
 
         public static string RentDateCannotBeGreaterThanReturnDate = "RentDate can not be greater than ReturrnDate";
+
+        public static string CarServiceListed = "Car Service Listed.";
+        public static string CarServicePaging = "Car Service Paging.";
+        public static string CarServiceNotFound = "Car Service Not Found.";
+        public static string NotFoundCarService = " Not Found Car Service.";
+        public static string CarServiceNotUpdated = "Car Service Not Updated.";
+        public static string CarServiceDeleted = "Car Service Deleted.";
+        public static string CarServiceNotDeleted = "Car Service Not Deleted.";
+        public static string CarServiceAdded = "Car Service Added.";
+        public static string ServiceEntryCannotBeGreaterThanServiceExitDate = "Car Service Exit can not be greater than Service Entry Date";
     }
 }

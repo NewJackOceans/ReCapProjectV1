@@ -13,6 +13,8 @@ namespace DataAccess.Concrete.EntityFramework
             using (ReCapProjectContext context = new ReCapProjectContext())
             {
                 var result = from c in context.Cars
+                             join cr in context.CarServices
+                                 on c.CarId equals cr.CarId
                              join b in context.Brands
                                  on c.BrandId equals b.BrandId
                              join co in context.Colors

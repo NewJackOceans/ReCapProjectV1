@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll([FromQuery] int carId, [FromQuery] int colorId,[FromQuery] int brandId, [FromQuery] string modelYear = "", string carName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
+        public IActionResult GetAll([FromQuery] int carId, [FromQuery] int colorId,[FromQuery] int brandId, [FromQuery] string modelYear = "", [FromQuery] string carName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
 
             var result = _carService.Search(carName, modelYear, carId, colorId, brandId, pageIndex, pageCount);
