@@ -32,7 +32,7 @@ namespace Business.Concrete
             var car = _carService.GetById(request.CarId);
             if (!car.Success)
                 return new ErrorResult(car.Message);
-            if (request.ServiceEntryDate > request.ServiceExitDate)
+            if (request.ServiceEntryDate > request.ServiceExitDate )
                 return new ErrorResult(Messages.ServiceEntryCannotBeGreaterThanServiceExitDate);
 
             carService.CarId = request.CarId;

@@ -28,11 +28,6 @@ namespace Core.DataAccess.EntityFramework
             }
         }
         
-
-
-
-
-
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
             using (TContext context = new TContext())
@@ -50,6 +45,7 @@ namespace Core.DataAccess.EntityFramework
                     : context.Set<TEntity>().Where(filter).ToList();
             }
         }
+
         public List<TEntity> GetForPageable(Expression<Func<TEntity, bool>> filter = null, int pageIndex = 0, int pageCount = 20)
         {
             using (TContext context = new TContext()) 
@@ -59,6 +55,7 @@ namespace Core.DataAccess.EntityFramework
                     : context.Set<TEntity>().Where(filter).Skip(pageIndex * pageCount).Take(pageCount).ToList();
             }
         }
+
         public int GetCount(Expression<Func<TEntity, bool>> filter = null)
         {
             using (TContext context = new TContext())

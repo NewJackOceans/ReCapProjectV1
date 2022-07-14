@@ -22,6 +22,11 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public DbSet<CarService> CarServices { get; set; }
+        public DbSet<Tyre> Tyres { get; set; }
+        public DbSet<TyreCategory> TyreCategories { get; set; }
+        public DbSet<CarTyreChange> CarTyreChanges { get; set; }
+        public DbSet<TyreBrand> TyreBrands { get; set; }
+
 
 
     }

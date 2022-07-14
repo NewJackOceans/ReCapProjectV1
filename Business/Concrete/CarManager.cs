@@ -85,19 +85,15 @@ namespace Business.Concrete
             if (car != null)
             {
                 var brand = _brandService.GetById(id);
-                if (brand.Success)
-                    car.BrandId = request.BrandId;
-                else
+                if (!brand.Success)
                     return new ErrorResult(brand.Message);
 
-
-                var color = _colorService.GetById(request.ColorId);
-                if (color != null)
-                    car.ColorId = request.ColorId;
-                else
+                var color = _colorService.GetById(id);
+                if (!color.Success)
                     return new ErrorResult(Messages.NotFoundColor);
 
-
+                car.ColorId = request.ColorId;
+                car.BrandId = request.BrandId;
                 car.CarName = request.CarName;
                 car.ModelYear = request.ModelYear;
                 car.DailyPrice = request.DailyPrice;

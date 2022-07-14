@@ -98,5 +98,28 @@ namespace Business.Constants
         public static string CarServiceNotDeleted = "Car Service Not Deleted.";
         public static string CarServiceAdded = "Car Service Added.";
         public static string ServiceEntryCannotBeGreaterThanServiceExitDate = "Car Service Exit can not be greater than Service Entry Date";
+
+        public static string TyreListed = "Tyre Listed";
+        public static string TyreCategoryListed = "Tyre Category Listed";
+        public static string TyreBrandListed = "Tyre Brand Listed";
+        public static string CarTyreChangeListed = "Car Tyre Change Listed";
+        public static string TyreNotFound = "Tyre Not Found";
+        public static string TyreBrandNotFound = "Tyre Brand Not Found";
+        public static string TyreAdded = "Tyre Added";
+        public static string TyreCategoryAdded = "Tyre Category Added";
+        public static string TyreBrandAdded = "Tyre Brand Added";
+        public static string CarTyreChangeAdded = "Car Tyre Change Added";
+        public static string TyreDeleted = "Tyre Deleted";
+        public static string TyreCategoryDeleted = "Tyre Category Deleted";
+        public static string TyreBrandDeleted = "Tyre Brand Deleted";
+        public static string CarTyreChangeDeleted = "Car Tyre Change Deleted";
+        public static string TyreUpdated = "Tyre Updated";
+        public static string TyreNotUpdated = "Tyre Not Updated";
+        public static string TyreCategoryUpdated = "Tyre Category Updated";
+        public static string TyreCategoryNotUpdated = "Tyre Category Not Updated";
+        public static string TyreBrandUpdated = "Tyre Brand Updated";
+        public static string TyreBrandNotUpdated = "Tyre Brand Not Updated";
+        public static string TyreCarChangeUpdated = "Tyre Car Change Updated";
+        public static string TyreCarChangeNotUpdated = "Tyre Car Change Not Updated";
     }
 }

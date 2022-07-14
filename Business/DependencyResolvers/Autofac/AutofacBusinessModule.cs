@@ -50,6 +50,20 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<CarServiceManager>().As<ICarServiceService>().SingleInstance();
             builder.RegisterType<EfCarServiceDal>().As<ICarServiceDal>().SingleInstance();
 
+            builder.RegisterType<TyreManager>().As<ITyreService>().SingleInstance();
+            builder.RegisterType<EfTyreDal>().As<ITyreDal>().SingleInstance();
+
+            builder.RegisterType<TyreCategoryManager>().As<ITyreCategoryService>().SingleInstance();
+            builder.RegisterType<EfTyreCategoryDal>().As<ITyreCategoryDal>().SingleInstance();
+
+            builder.RegisterType<TyreBrandManager>().As<ITyreBrandService>().SingleInstance();
+            builder.RegisterType<EfTyreBrandDal>().As<ITyreBrandDal>().SingleInstance();
+
+            builder.RegisterType<CarTyreChangeManager>().As<ICarTyreChangeService>().SingleInstance();
+            builder.RegisterType<EfCarTyreChangeDal>().As<ICarTyreChangeDal>().SingleInstance();
+
+
+
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
