@@ -18,13 +18,13 @@ namespace Business.Concrete
     {
         ICarTyreChangeDal _carTyreChangeDal;
         ICarService _carService;
-        ITyreBrandService _tyreBrandService;
+        ITyreService _tyreService;
 
-        public CarTyreChangeManager(ICarTyreChangeDal carTyreChangeDal, ICarService carService, ITyreBrandService tyreBrandService)
+        public CarTyreChangeManager(ICarTyreChangeDal carTyreChangeDal, ICarService carService, ITyreService tyreService)
         {
             _carTyreChangeDal = carTyreChangeDal;
             _carService = carService;
-            _tyreBrandService = tyreBrandService;
+            _tyreService = tyreService;
         }
 
         public IResult Add(CreateCarTyreChangeRequest request)
@@ -34,13 +34,14 @@ namespace Business.Concrete
             var car = _carService.GetById(request.CarId);
             if (!car.Success)
                 return new ErrorResult(car.Message);
-            var tyreBrand = _tyreBrandService.GetById(request.TyreBrandId);
-            if (!tyreBrand.Success)
-                return new ErrorResult(tyreBrand.Message);
+            var tyre = _tyreService.GetById(request.TyreId);
+            if (!tyre.Success)
+                return new ErrorResult(tyre.Message);
 
             carTyreChange.CarId = request.CarId;
-            carTyreChange.TyreBrandId = request.TyreBrandId;
-            carTyreChange.TyreChangeDate = request.TyreChangeDate;
+            
+            carTyreChange.TyreId = request.TyreId;
+            carTyreChange.TyreChangeDate = DateTime.Now;
             carTyreChange.TyreChangeKm = request.TyreChangeKm;
 
             _carTyreChangeDal.Add(carTyreChange);
@@ -67,12 +68,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarTyreChange>>(_carTyreChangeDal.GetForPageable(null, pageIndex, pageCount));
         }
 
-        public Pageable<CarTyreChange> Search(int id, int carId, int tyreBrandId, int tyreChangeKm, DateTime tyreChangeDate, int pageIndex, int pageCount)
+        public Pageable<CarTyreChange> Search(int id, int carId, int tyreId, int tyreChangeKm, DateTime tyreChangeDate, int pageIndex, int pageCount)
         {
             Expression<Func<CarTyreChange, bool>> searchQuery = carTyreChange =>
             (id > 0 ? carTyreChange.Id == id : true) &&
             (carId > 0 ? carTyreChange.CarId == carId : true) &&
-            (tyreBrandId > 0 ? carTyreChange.TyreBrandId == tyreBrandId : true) &&
+            (tyreId > 0 ? carTyreChange.TyreId == tyreId : true) &&
             (tyreChangeKm > 0 ? carTyreChange.TyreChangeKm == tyreChangeKm : true) &&
             (tyreChangeDate == null ? carTyreChange.TyreChangeDate == tyreChangeDate : true);
 
@@ -93,12 +94,12 @@ namespace Business.Concrete
                 if (!car.Success)
                     return new ErrorResult(car.Message);
 
-                var tyreBrand = _tyreBrandService.GetById(id);
-                if (!tyreBrand.Success)
-                    return new ErrorResult(tyreBrand.Message);
+                var tyre = _tyreService.GetById(id);
+                if (!tyre.Success)
+                    return new ErrorResult(tyre.Message);
 
                 carTyreChange.CarId = request.CarId;
-                carTyreChange.TyreBrandId = request.TyreBrandId;
+                carTyreChange.TyreId = request.TyreId;
                 carTyreChange.TyreChangeDate = request.TyreChangeDate;
                 carTyreChange.TyreChangeKm = request.TyreChangeKm;
 

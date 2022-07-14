@@ -18,9 +18,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int tyreBrandId, [FromQuery] int tyreChangeKm, [FromQuery] DateTime tyreChangeDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
+        public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int tyreId, [FromQuery] int tyreChangeKm, [FromQuery] DateTime tyreChangeDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
-            var result = _carTyreChangeService.Search(id, carId, tyreBrandId, tyreChangeKm, tyreChangeDate, pageIndex, pageCount);
+            var result = _carTyreChangeService.Search(id, carId, tyreId, tyreChangeKm, tyreChangeDate, pageIndex, pageCount);
 
             return Ok(result);
         }
