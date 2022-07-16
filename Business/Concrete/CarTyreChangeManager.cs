@@ -31,6 +31,7 @@ namespace Business.Concrete
         {
             CarTyreChange carTyreChange = new CarTyreChange();
 
+
             var car = _carService.GetById(request.CarId);
             if (!car.Success)
                 return new ErrorResult(car.Message);
@@ -39,14 +40,87 @@ namespace Business.Concrete
                 return new ErrorResult(tyre.Message);
 
             carTyreChange.CarId = request.CarId;
-            
             carTyreChange.TyreId = request.TyreId;
             carTyreChange.TyreChangeDate = DateTime.Now;
             carTyreChange.TyreChangeKm = request.TyreChangeKm;
 
+
+
             _carTyreChangeDal.Add(carTyreChange);
             return new SuccessResult(Messages.CarTyreChangeAdded);
 
+        }
+
+        public IResult AddBulk(CreateBulkCarTyreChangeRequest request)
+        {
+            List<CarTyreChange> carTyreChanges = new List<CarTyreChange>();
+
+
+            if (request.TyreIds.Count > 4)
+                return new ErrorResult(Messages.TyreIdsNotGretherThan4);
+
+            var car = _carService.GetById(request.CarId);
+            if (!car.Success)
+                return new ErrorResult(car.Message);
+
+
+            foreach (var tyreId in request.TyreIds)
+            {
+                var tyre = _tyreService.GetById(tyreId);
+                if (!tyre.Success)
+                    return new ErrorResult(tyre.Message);
+
+                CarTyreChange carTyreChange = new CarTyreChange();
+
+                carTyreChange.CarId = request.CarId;
+                carTyreChange.TyreId = tyreId;
+                carTyreChange.TyreChangeDate = DateTime.Now;
+                carTyreChange.TyreChangeKm = request.TyreChangeKm;
+
+                carTyreChanges.Add(carTyreChange);
+
+            }
+
+            _carTyreChangeDal.BulkAdd(carTyreChanges);
+            return new SuccessResult(Messages.CarTyreChangeAdded);
+
+        }
+
+        public IResult AddBulkForName(CreateBulkNameCarTyreChangeRequest request)
+        {
+
+
+            List<CarTyreChange> carTyreChanges = new List<CarTyreChange>();
+
+            if (request.TyreNames.Count > 4)
+                return new ErrorResult(Messages.TyreIdsNotGretherThan4);
+
+
+            var carName = _carService.GetByNameForValue(request.CarName);
+            if (carName == null)
+                return new ErrorResult(Messages.CarNotFound);
+
+            foreach (var tyreName in request.TyreNames)
+            {
+                var tyres = _tyreService.GetByNameForValue(tyreName);
+                if (tyres == null)
+                    return new ErrorResult(Messages.TyreNameNotFound);               
+                               
+
+                CarTyreChange carTyreChange = new CarTyreChange();
+
+
+                carTyreChange.TyreId = tyres.Data.Id;
+                carTyreChange.CarId = carName.Data.CarId;
+                carTyreChange.TyreChangeDate = DateTime.Now;
+                carTyreChange.TyreChangeKm = request.TyreChangeKm;
+
+                carTyreChanges.Add(carTyreChange);
+
+            }
+
+            _carTyreChangeDal.BulkAddForName(carTyreChanges);
+            return new SuccessResult(Messages.CarTyreChangeAdded);
 
         }
 
@@ -97,6 +171,7 @@ namespace Business.Concrete
                 var tyre = _tyreService.GetById(id);
                 if (!tyre.Success)
                     return new ErrorResult(tyre.Message);
+
 
                 carTyreChange.CarId = request.CarId;
                 carTyreChange.TyreId = request.TyreId;

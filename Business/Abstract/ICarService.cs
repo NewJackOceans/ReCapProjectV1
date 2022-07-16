@@ -11,6 +11,7 @@ namespace Business.Abstract
         IResult Add(CreateCarRequest request);
         IResult Update(int id, UpdateCarRequest request);
         IResult Delete(int id);
+        IDataResult<Car> GetByNameForValue(string carName);
         IDataResult<List<Car>> GetAll();
         IDataResult<Car> GetById(int id);
         IDataResult<List<CarDetailDto>> GetCarDetails();

@@ -19,6 +19,8 @@ namespace Business.Abstract
         IDataResult<Tyre> GetById(int id);
         IResult Delete(int id);
         IResult Update(int id, UpdateTyreRequest request);
+        IDataResult<Tyre> GetByNameForValue(string tyreName);
+
 
 
     }

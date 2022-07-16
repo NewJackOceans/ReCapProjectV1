@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Requests.CarTyreChanges;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,8 +25,9 @@ namespace WebAPI.Controllers
 
             return Ok(result);
         }
-
+        
         [HttpPost]
+        [Authorize]
         public IActionResult Add([FromBody] CreateCarTyreChangeRequest request)
         {
             var result = _carTyreChangeService.Add(request);
@@ -56,5 +58,29 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpPost("bulk")]
+        public IActionResult AddBulk([FromBody] CreateBulkCarTyreChangeRequest request)
+        {
+            var result = _carTyreChangeService.AddBulk(request);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("bulkname")]
+        public IActionResult AddBulkForName([FromBody] CreateBulkNameCarTyreChangeRequest request)
+        {
+            var result = _carTyreChangeService.AddBulkForName(request);
+            
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
     }
 }

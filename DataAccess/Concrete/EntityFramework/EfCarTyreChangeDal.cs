@@ -6,5 +6,7 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfCarTyreChangeDal : EfEntityRepositoryBase<CarTyreChange, ReCapProjectContext>, ICarTyreChangeDal
     {
+        
+        
     }
 }

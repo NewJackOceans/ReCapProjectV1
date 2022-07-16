@@ -22,6 +22,16 @@ namespace DataAccess.Concrete.InMemory
             _cars.Add(car);
         }
 
+        public void BulkAdd(List<Car> entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BulkAddForName(List<Car> entities)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete(Car car)
         {
             Car carToDelete = _cars.SingleOrDefault(c=>c.CarId==car.CarId);

@@ -9,6 +9,8 @@ namespace Core.DataAccess
         List<T> GetForPageable(Expression<Func<T, bool>> filter = null, int pageIndex = 0, int pageCount = 20);
         T Get(Expression<Func<T, bool>> filter);
         void Add(T entity);
+        void BulkAdd(List<T> entities);
+        void BulkAddForName(List<T> entities);
         void Update(T entity);
         void Delete(T entity);
         int GetCount(Expression<Func<T, bool>> filter = null);

@@ -121,5 +121,9 @@ namespace Business.Constants
         public static string TyreBrandNotUpdated = "Tyre Brand Not Updated";
         public static string TyreCarChangeUpdated = "Tyre Car Change Updated";
         public static string TyreCarChangeNotUpdated = "Tyre Car Change Not Updated";
+        public static string AmountNotGreatherThanFour = "Tyres cannot be more than 4";
+
+        public static string TyreIdsNotGretherThan4 { get; internal set; }
+        public static string TyreNameNotFound { get; internal set; }
     }
 }

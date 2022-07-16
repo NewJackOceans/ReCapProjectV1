@@ -57,7 +57,6 @@ namespace Business.Concrete
 
             return new SuccessResult(Messages.TyreDeleted);
         }
-
         public IDataResult<List<Tyre>> GetAll()
         {
             return new SuccessDataResult<List<Tyre>>(_tyreDal.GetAll(), Messages.TyreListed);
@@ -72,10 +71,23 @@ namespace Business.Concrete
                 return new SuccessDataResult<Tyre>(tyre);
         }
 
+        public IDataResult<Tyre> GetByNameForValue(string tyreName)
+        {
+            var tyreNameValue = _tyreDal.Get(tyreNameValue => tyreNameValue.TyreName == tyreName);
+            if (tyreNameValue == null)
+            {
+                return new ErrorDataResult<Tyre>(Messages.TyreNotFound);
+            }
+            else
+                return new SuccessDataResult<Tyre>(tyreNameValue);
+        }
+
         public IDataResult<List<Tyre>> GetForPageable(int pageIndex, int pageCount)
         {
             return new SuccessDataResult<List<Tyre>>(_tyreDal.GetForPageable(null, pageIndex, pageCount));
         }
+
+        
 
         public Pageable<Tyre> Search(string tyreName, int id, int tyreCategoryId, int tyreBrandId, int pageIndex, int pageCount)
         {

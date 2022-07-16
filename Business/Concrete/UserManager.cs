@@ -108,7 +108,7 @@ namespace Business.Concrete
         public IDataResult<User> GetById(int id)
         {
             var user = _userDal.Get(user => user.Id == id);
-            if (user != null)
+            if (user == null)
             {
                 return new ErrorDataResult<User>(Messages.UserIsAvailable);
             }

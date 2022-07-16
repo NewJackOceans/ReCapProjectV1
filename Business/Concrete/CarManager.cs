@@ -10,6 +10,7 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
 using Entities.Requests.Cars;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Business.Concrete
@@ -35,7 +36,6 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
-
 
         public IDataResult<List<Car>> GetForPageable(int pageIndex, int pageCount)
         {
@@ -72,7 +72,6 @@ namespace Business.Concrete
             car.ModelYear = request.ModelYear;
             car.Description = request.Description;
 
-
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
@@ -106,7 +105,6 @@ namespace Business.Concrete
 
         }
 
-
         public IResult Delete(int id)
         {
             var car = _carDal.Get(car => car.CarId == id);
@@ -115,7 +113,6 @@ namespace Business.Concrete
 
             return new SuccessResult(Messages.CarDeleted);
         }
-
 
         [TransactionScopeAspect]
         public IResult AddTransactionalTest(Car car)
@@ -153,6 +150,17 @@ namespace Business.Concrete
                 return new ErrorDataResult<Car>(Messages.CarNotFound);
             else
                 return new SuccessDataResult<Car>(car);
+        }
+
+        public IDataResult<Car> GetByNameForValue(string carName)
+        {
+            var carNameValue = _carDal.Get(carNameValue => carNameValue.CarName == carName);
+            if (carNameValue == null)
+            {
+                return new ErrorDataResult<Car>(Messages.CarNotFound);
+            }
+            else
+                return new SuccessDataResult<Car>(carNameValue);
         }
     }
 }
