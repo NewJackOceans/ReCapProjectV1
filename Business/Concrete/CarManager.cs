@@ -57,6 +57,7 @@ namespace Business.Concrete
 
             //ValidationTool.Validate(new CarValidator(), car);
             Car car = new Car();
+
             var brand = _brandService.GetById(request.BrandId);
             if (!brand.Success)
                 return new ErrorResult(brand.Message);

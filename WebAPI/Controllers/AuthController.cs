@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
 using Entities.DTOs;
+using Core.Entities.Requests.Users;
+using Core.Utilities.Results;
+using Core.Entities.Concrete;
 
 namespace WebAPI.Controllers
 {
@@ -17,6 +20,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(IDataResult<User>), 200)]
         public ActionResult Login(UserForLoginDto userForLoginDto)
         {
             var userToLogin = _authService.Login(userForLoginDto);
@@ -35,6 +39,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(IDataResult<User>), 200)]
         public ActionResult Register(UserForRegisterDto userForRegisterDto)
         {
             var userExists = _authService.UserExists(userForRegisterDto.Email);

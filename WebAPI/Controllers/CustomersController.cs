@@ -1,13 +1,17 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using Business.Abstract;
 using Entities.Requests.Customers;
+using Microsoft.AspNetCore.Authorization;
+using Core.Utilities.Results;
+using Core.Entities;
+using Entities.Concrete;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CustomersController : ControllerBase
     {
         private ICustomerService _costumerService;
@@ -18,6 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(Pageable<Customer>), 200)]
         public IActionResult GetAll([FromQuery] int customerId, [FromQuery] int userId, [FromQuery] string companyName = "", int pageIndex = 0, int pageCount = 20)
         {
             
@@ -27,6 +32,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Add([FromBody] CreateCustomerRequest resquest)
         {
             var result = _costumerService.Add(resquest);
@@ -38,6 +44,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Delete([FromRoute] int id)
         {
             var result = _costumerService.Delete(id);
@@ -49,6 +56,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Update([FromRoute] int id, [FromBody] UpdateCustomerRequest request)
         {
             var result = _costumerService.Update(id, request);

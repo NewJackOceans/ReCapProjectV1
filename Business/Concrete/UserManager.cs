@@ -5,21 +5,19 @@ using Core.Entities;
 using Core.Entities.Concrete;
 using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
         private IUserDal _userDal;
-        private IUserService _userService;
-        IAuthService _authService;
 
-        public UserManager(IUserDal userDal, IUserService userService, IAuthService authService)
+        public UserManager(IUserDal userDal)
         {
             _userDal = userDal;
-            _userService = userService;
-            _authService = authService;
         }
 
         public List<OperationClaim> GetClaims(User user)
@@ -33,47 +31,32 @@ namespace Business.Concrete
         }
 
         //[ValidationAspect(typeof(UserValidator))]
-        public IResult Add(CreateUserRequest request)
-        {
-            //ValidationTool.Validate(new UserValidator(), user);
-            User user = new User();
-
-            var email = _authService.UserExists(request.EMail);
-            if (email.Success)
-                user.EMail = request.EMail;
-            else
-                return new ErrorResult(Messages.UserAlreadyExists);
-
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
-
-
-
+        public IResult Add(User user)
+        {            
             _userDal.Add(user);
             return new SuccessResult(Messages.UserAdded);
         }
 
-        public IResult Update(int id, UpdateUserRequest request)
+        public IResult Update(int id, UserForRegisterDto userForRegisterDto)
         {
             var user = _userDal.Get(user => user.Id == id);
             if (user != null)
             {
-                user.EMail = request.EMail;
-                user.FirstName = request.FirstName;
-                user.LastName = request.LastName;
-                user.Status = request.Status;
+                user.EMail = userForRegisterDto.Email;
+                user.FirstName = userForRegisterDto.FirstName;
+                user.LastName = userForRegisterDto.LastName;
                 _userDal.Update(user);
                 return new SuccessResult(Messages.UserUpdated);
             }
             else
                 return new ErrorResult(Messages.UserNotUpdated);
-            
+
         }
 
         public IResult Delete(int id)
         {
             var user = _userDal.Get(user => user.Id == id);
-            if(user != null)
+            if (user != null)
                 _userDal.Delete(user);
             return new SuccessResult(Messages.UserDeleted);
         }
@@ -94,7 +77,7 @@ namespace Business.Concrete
             (!string.IsNullOrWhiteSpace(lastName) ? user.LastName.Contains(lastName) : true) &&
             (!string.IsNullOrWhiteSpace(email) ? user.EMail.Contains(email) : true) &&
             (id > 0 ? user.Id == id : true) &&
-            (status != null ? user.Status == status : true) ;
+            (status != null ? user.Status == status : true);
 
             var users = _userDal.GetForPageable(searchQuery, pageIndex, pageCount);
             var count = _userDal.GetCount(searchQuery);
@@ -115,9 +98,5 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(user);
         }
 
-        public void Add(User user)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -3,11 +3,18 @@ using System;
 using System.Threading;
 using Business.Abstract;
 using Entities.Requests.Rentals;
+using Microsoft.AspNetCore.Authorization;
+using Core.Entities;
+using Entities.Concrete;
+using Core.Utilities.Results;
+using Entities.DTOs;
+using System.Collections.Generic;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RentalsController : ControllerBase
     {
         private IRentalService _rentalService;
@@ -18,6 +25,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(Pageable<Rental>), 200)]
         public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int customerId, [FromQuery] DateTime rentDate,[FromQuery] DateTime returnDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             
@@ -28,6 +36,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("details")]
+        [ProducesResponseType(typeof(IDataResult<List<RentalDetailDto>>), 200)]
         public IActionResult GetRentalsDetails()
         {
             var result = _rentalService.GetRentalsDetails();
@@ -39,6 +48,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Add([FromBody] CreateRentalRequest request)
         {
             var result = _rentalService.Add(request);
@@ -50,6 +60,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Delete([FromRoute] int id)
         {
             var result = _rentalService.Delete(id);
@@ -61,6 +72,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Update([FromRoute] int id, [FromBody] UpdateRentalRequest request)
         {
             var result = _rentalService.Update(id, request);
@@ -71,6 +83,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpGet("iscaravaible")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult IsCarAvaible(int cardId)
         {
             var result = _rentalService.IsCarAvaible(cardId);

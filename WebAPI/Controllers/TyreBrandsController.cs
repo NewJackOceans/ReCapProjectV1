@@ -1,12 +1,16 @@
 ﻿using Business.Abstract;
+using Core.Entities;
+using Core.Utilities.Results;
+using Entities.Concrete;
 using Entities.Requests.TyreBrands;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TyreBrandsController : ControllerBase
     {
         ITyreBrandService _tyreBrandService;
@@ -17,6 +21,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(Pageable<TyreBrand>), 200)]
         public IActionResult GetAll([FromQuery] int id, [FromQuery] string tyreBrandName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             var result = _tyreBrandService.Search(id, tyreBrandName, pageIndex, pageCount);
@@ -24,6 +29,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Add([FromBody] CreateTyreBrandRequest request)
         {
             var result = _tyreBrandService.Add(request);
@@ -35,6 +41,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Delete([FromRoute] int id)
         {
             var result = _tyreBrandService.Delete(id);
@@ -46,6 +53,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Update([FromRoute] int id, [FromBody] UpdateTyreBrandRequest request)
         {
             var result = _tyreBrandService.Update(id, request);

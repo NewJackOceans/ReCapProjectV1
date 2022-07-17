@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
+using Core.Entities;
+using Core.Utilities.Results;
+using Entities.Concrete;
 using Entities.Requests.CarTyreChanges;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -9,6 +11,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CarTyreChangesController : ControllerBase
     {
         ICarTyreChangeService _carTyreChangeService;
@@ -19,6 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(Pageable<CarTyreChange>), 200)]
         public IActionResult GetAll([FromQuery] int id, [FromQuery] int carId, [FromQuery] int tyreId, [FromQuery] int tyreChangeKm, [FromQuery] DateTime tyreChangeDate, [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
             var result = _carTyreChangeService.Search(id, carId, tyreId, tyreChangeKm, tyreChangeDate, pageIndex, pageCount);
@@ -27,7 +31,7 @@ namespace WebAPI.Controllers
         }
         
         [HttpPost]
-        [Authorize]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Add([FromBody] CreateCarTyreChangeRequest request)
         {
             var result = _carTyreChangeService.Add(request);
@@ -38,6 +42,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Delete([FromRoute] int id)
         {
             var result = _carTyreChangeService.Delete(id);
@@ -49,6 +54,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult Update([FromRoute] int id, [FromBody] UpdateCarTyreChangeRequest request)
         {
             var result = _carTyreChangeService.Update(id, request);
@@ -60,6 +66,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("bulk")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult AddBulk([FromBody] CreateBulkCarTyreChangeRequest request)
         {
             var result = _carTyreChangeService.AddBulk(request);
@@ -70,6 +77,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpPost("bulkname")]
+        [ProducesResponseType(typeof(IResult), 200)]
         public IActionResult AddBulkForName([FromBody] CreateBulkNameCarTyreChangeRequest request)
         {
             var result = _carTyreChangeService.AddBulkForName(request);
