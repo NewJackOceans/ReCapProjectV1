@@ -125,5 +125,6 @@ namespace Business.Constants
 
         public static string TyreIdsNotGretherThan4 { get; internal set; }
         public static string TyreNameNotFound { get; internal set; }
+        public static object NotFoundTrueMail { get; internal set; }
     }
 }

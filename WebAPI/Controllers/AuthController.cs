@@ -1,8 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
 using Entities.DTOs;
-using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
 using Core.Entities.Concrete;
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
-using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
 using Core.Entities.Concrete;
 using Entities.DTOs;
@@ -21,13 +20,14 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(Pageable<User>), 200)]
-        public IActionResult GetAll([FromQuery] int id, [FromQuery] bool status, [FromQuery] string firstName = "", [FromQuery] string lastName = "", [FromQuery] string email = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
+        public IActionResult GetAll([FromQuery] int id, [FromQuery] bool? status, [FromQuery] bool? iWantToMail, [FromQuery] string firstName = "", [FromQuery] string lastName = "", [FromQuery] string email = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageCount = 20)
         {
 
-            var result = _userService.Search(id, status, firstName, lastName, email, pageIndex, pageCount);
+            var result = _userService.Search(id, status,iWantToMail, firstName, lastName, email, pageIndex, pageCount);
 
             return Ok(result);
         }
+        
 
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(IResult), 200)]

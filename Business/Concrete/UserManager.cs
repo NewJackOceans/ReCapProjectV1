@@ -3,7 +3,6 @@ using Business.Abstract;
 using Business.Constants;
 using Core.Entities;
 using Core.Entities.Concrete;
-using Core.Entities.Requests.Users;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
@@ -32,7 +31,7 @@ namespace Business.Concrete
 
         //[ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
-        {            
+        {
             _userDal.Add(user);
             return new SuccessResult(Messages.UserAdded);
         }
@@ -70,22 +69,26 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(_userDal.GetForPageable(null, pageIndex, pageCount), Messages.UserPaging);
         }
 
-        public Pageable<User> Search(int id, bool status, string firstName, string lastName, string email, int pageIndex, int pageCount)
+
+        public Pageable<User> Search(int id, bool? status, bool? iWantToMail, string firstName, string lastName, string email, int pageIndex, int pageCount)
         {
+
             Expression<Func<User, bool>> searchQuery = user =>
             (!string.IsNullOrWhiteSpace(firstName) ? user.FirstName.Contains(firstName) : true) &&
             (!string.IsNullOrWhiteSpace(lastName) ? user.LastName.Contains(lastName) : true) &&
             (!string.IsNullOrWhiteSpace(email) ? user.EMail.Contains(email) : true) &&
             (id > 0 ? user.Id == id : true) &&
-            (status != null ? user.Status == status : true);
+            (status != null ? user.Status == status.GetValueOrDefault() : true) &&
+            (iWantToMail != null ? user.IWantToMail == iWantToMail.GetValueOrDefault() : true);
+            
+
+
 
             var users = _userDal.GetForPageable(searchQuery, pageIndex, pageCount);
             var count = _userDal.GetCount(searchQuery);
             var data = new Pageable<User>(pageIndex, pageCount, count, users);
 
             return data;
-
-
         }
 
         public IDataResult<User> GetById(int id)
@@ -97,6 +100,8 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<User>(user);
         }
+        
 
-    }
+
+}
 }
