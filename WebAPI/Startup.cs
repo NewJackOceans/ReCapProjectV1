@@ -1,3 +1,5 @@
+using Business.Abstract;
+using Business.Concrete;
 using Core.DependencyResolvers;
 using Core.Extentions;
 using Core.Utilities.IoC;
@@ -33,6 +35,7 @@ namespace WebAPI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllers();
             services.AddCors();
+            services.AddScoped<IEmailService, EmailManager>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rent a Car", Version = "v1", Description="This test page"  });
@@ -59,6 +62,7 @@ namespace WebAPI
                     }
                 });
             });
+
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

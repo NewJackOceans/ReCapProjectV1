@@ -1,4 +1,5 @@
-﻿using Entities.DTOs;
+﻿using Core.Utilities.Results;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Business.Abstract
 {
     public interface IEmailService
     {
-        //void SendEmail(EmailDto request);
+        void SendEmail(EmailDto request);
     }
 }
