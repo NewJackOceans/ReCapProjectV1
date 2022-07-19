@@ -62,6 +62,10 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<CarTyreChangeManager>().As<ICarTyreChangeService>().SingleInstance();
             builder.RegisterType<EfCarTyreChangeDal>().As<ICarTyreChangeDal>().SingleInstance();
 
+            builder.RegisterType<EmailManager>().As<IEmailService>().SingleInstance();
+
+
+
 
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();

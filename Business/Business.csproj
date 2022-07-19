@@ -13,6 +13,7 @@
     <PackageReference Include="DeveloperForce.Force" Version="2.1.0" />
     <PackageReference Include="FluentValidation" Version="11.0.2" />
     <PackageReference Include="HT.Image" Version="6.0.5.16" />
+    <PackageReference Include="MailKit" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
   </ItemGroup>

@@ -80,13 +80,13 @@ namespace Business.Concrete
             (id > 0 ? user.Id == id : true) &&
             (status != null ? user.Status == status.GetValueOrDefault() : true) &&
             (iWantToMail != null ? user.IWantToMail == iWantToMail.GetValueOrDefault() : true);
-            
-
-
 
             var users = _userDal.GetForPageable(searchQuery, pageIndex, pageCount);
             var count = _userDal.GetCount(searchQuery);
+            
             var data = new Pageable<User>(pageIndex, pageCount, count, users);
+            
+
 
             return data;
         }
@@ -100,8 +100,7 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<User>(user);
         }
+
         
-
-
-}
+    }
 }
